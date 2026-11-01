@@ -68,23 +68,24 @@ local function StartMenu()
     local DIAMONDS_KEY = "Diamonds"
     local POTIONS_KEY = nil         -- nil = auto-detect a save key that contains "potion"
 
-    local ANGELUS = "idd236f09e7d8d4f728bdf32b8bc1f367f"
+    local ANGELUS = "id8826989d86494944b29ccea1aaee5b19"
 
     local SMALL_PETS = {
-        "id33a10fe5157345d1ac9ae7b5b73b83d5",
-        "id6e5014caa33242c3b4a2a1217c47bec7",
-        "id5905137f7e0c4a6f8d4f06a09b4810f9",
-        "idb2237bdbbb414aafaa9d6262e874b9df",
-        "id62de7109c4114f74a2a49e40302bf2c3",
-        "id4d78c3c3b67441fc93bb851717a7abcd",
-        "idee0ca07d9f7b40c782507c4f9544d443",
-        "idfca4e98c04c3419e90a39548797d801e",
-        "id381898ab93e943df998e6816c7e5f96f",
+        "idac3208aa4bb0470490796ab2937bd559",
+        "idb3493866ef804c64b420a8b4eee09a41",
+        "id07d9508d534546fcaea6fe009d623a08",
+        "id2f8b0c6b1d5048bea1ed9fa151904330",
+        "idd871a1edca5846df816684ff8438cdd0",
+        "idc35ae66dea0d4edf829a03ea780e095e",
+        "idacbf5e66e591432c97d10174dbb76b58",
+        "id7ac692d0219e4b69a7372f59dcbd4a3b",
+        "ide869c36c08444a19b5f6a20b1c198306",
+        "id54dbb5be2c9d4453a76ad10c6e51ec97",
     }
 
-    -- REMOTES (this account: equip = child 146 from Cobalt, unequip = child 147 - check it with Cobalt)
-    local FALLBACK_EQUIP_INDEX = 146
-    local FALLBACK_UNEQUIP_INDEX = 147
+    -- REMOTES (this account: equip = child 16 from Cobalt, unequip = child 161 - check it with Cobalt)
+    local FALLBACK_EQUIP_INDEX = 160
+    local FALLBACK_UNEQUIP_INDEX = 161
 
     local EquipRemote
     local UnequipRemote
