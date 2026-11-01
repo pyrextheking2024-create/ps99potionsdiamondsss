@@ -1,3173 +1,2225 @@
-local _0xD619 =string.char(97,110,103,101,108,117,115,95,107,101,121,46,116,120,116)local _0x3DAD =string.char(97,110,103,101,108,117,115,95,98,105,110,100,46,106,115,111,110)local _0x80EE = {
-[string.char(107,105,110,103,45,97,55,120,57,50,45,109,52,113,56,49)] = true,
-[string.char(107,105,110,103,45,122,56,51,107,112,45,57,50,109,120,53)] = true,
-[string.char(107,105,110,103,45,52,110,113,55,50,45,120,56,98,51,49)] = true,
-[string.char(107,105,110,103,45,112,57,119,52,50,45,107,54,100,56,51)] = true,
-[string.char(107,105,110,103,45,55,120,109,50,49,45,113,52,118,57,53)] = true,
-[string.char(107,105,110,103,45,98,56,50,122,110,45,53,107,113,55,51)] = true,
-[string.char(107,105,110,103,45,109,52,120,57,49,45,116,56,112,50,54)] = true,
-[string.char(107,105,110,103,45,57,50,107,102,122,45,55,119,51,110,53)] = true,
-[string.char(107,105,110,103,45,113,56,49,118,54,45,109,50,57,120,112)] = true,
-[string.char(107,105,110,103,45,53,112,51,120,56,45,110,55,107,52,50)] = true,
+-- EMPYREAN DRAGON + SMALL PETS AUTO FARM  (single file: key screen + farm menu)
+--
+-- 1. Execute this script and enter your key (locked to the first device that uses it).
+-- 2. SETUP tab -> CALIBRATE REMOTES. Then EQUIP the Empyrean Dragon by hand and
+--    UNEQUIP it by hand (keep one slot free). The script learns the equip /
+--    unequip remotes by itself. TEST checks them (SWAP flips them if the test
+--    shows the opposite).
+-- 3. FARM tab -> START FARM. Loop: the dragon brings every present under 1.2M HP,
+--    then the 10 small pets finish them, then it repeats.
+--
+-- Remote numbers differ between accounts / sessions, so they are NOT hard-coded
+-- (FALLBACK_EQUIP_INDEX / FALLBACK_UNEQUIP_INDEX = 0 means "learn them").
+-- Pet UIDs (DRAGON, SMALL_PETS) are at the top of StartMenu.
+
+local KEY_FILE = "angelus_key.txt"
+local BIND_FILE = "angelus_bind.json"
+
+local VALID_KEYS = {
+    ["king-a7x92-m4q81"] = true,
+    ["king-z83kp-92mx5"] = true,
+    ["king-4nq72-x8b31"] = true,
+    ["king-p9w42-k6d83"] = true,
+    ["king-7xm21-q4v95"] = true,
+    ["king-b82zn-5kq73"] = true,
+    ["king-m4x91-t8p26"] = true,
+    ["king-92kfz-7w3n5"] = true,
+    ["king-q81v6-m29xp"] = true,
+    ["king-5p3x8-n7k42"] = true,
 }
-local _0xFB70 = game:GetService(string.char(80,108,97,121,101,114,115))
-local _0x2699 = game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))
-local _0x4207 = game:GetService(string.char(84,119,101,101,110,83,101,114,118,105,99,101))
-local _0x6CAE = game:GetService(string.char(72,116,116,112,83,101,114,118,105,99,101))
-local _0x9C17 = _0xFB70.LocalPlayerlocal function _0x6AE2()
-local _0xFB70 = game:GetService(string.char(80,108,97,121,101,114,115))
-local _0xB9C7 = game:GetService(string.char(82,101,112,108,105,99,97,116,101,100,83,116,111,114,97,103,101))
-local _0x2699 = game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))
-local _0x9C17 = _0xFB70.LocalPlayer
-local _0x7702 = require(
-_0xB9C7:WaitForChild(string.char(70,114,97,109,101,119,111,114,107)):WaitForChild(string.char(76,105,98,114,97,114,121))
-)
-repeat task.wait() until _0x7702.Loaded
-local _0xE0E9 = _0x7702.Things:WaitForChild(string.char(67,111,105,110,115))local _0x75D4 = 1200000
-local _0x4B4F = 67500000
-local _0xD9D8 = 150000local _0x7914 = 250
-local _0x6944 = 3local _0xA1AA = 10local _0x9C53 = 3local _0x452C = falselocal _0x80D2 =string.char(68,105,97,109,111,110,100,115)local _0x7BAD = nillocal _0xDB8D =string.char(105,100,56,56,50,54,57,56,57,100,56,54,52,57,52,57,52,52,98,50,57,99,99,101,97,49,97,97,101,101,53,98,49,57)local _0xE3AC = {string.char(105,100,97,99,51,50,48,56,97,97,52,98,98,48,52,55,48,52,57,48,55,57,54,97,98,50,57,51,55,98,100,53,53,57),string.char(105,100,98,51,52,57,51,56,54,54,101,102,56,48,52,99,54,52,98,52,50,48,97,56,98,52,101,101,101,48,57,97,52,49),string.char(105,100,48,55,100,57,53,48,56,100,53,51,52,53,52,54,102,99,97,101,97,54,102,101,48,48,57,100,54,50,51,97,48,56),string.char(105,100,50,102,56,98,48,99,54,98,49,100,53,48,52,56,98,101,97,49,101,100,57,102,97,49,53,49,57,48,52,51,51,48),string.char(105,100,100,56,55,49,97,49,101,100,99,97,53,56,52,54,100,102,56,49,54,54,56,52,102,102,56,52,51,56,99,100,100,48),string.char(105,100,99,51,53,97,101,54,54,100,101,97,48,100,52,101,100,102,56,50,57,97,48,51,101,97,55,56,48,101,48,57,53,101),string.char(105,100,97,99,98,102,53,101,54,54,101,53,57,49,52,51,50,99,57,55,100,49,48,49,55,52,100,98,98,55,54,98,53,56),string.char(105,100,55,97,99,54,57,50,100,48,50,49,57,101,52,98,54,57,97,55,51,55,50,102,53,57,100,99,98,100,52,97,51,98),string.char(105,100,101,56,54,57,99,51,54,99,48,56,52,52,52,97,49,57,98,53,102,54,97,50,48,98,49,99,49,57,56,51,48,54),string.char(105,100,53,52,100,98,98,53,98,101,50,99,57,100,52,52,53,51,97,55,54,97,100,49,48,99,54,101,53,49,101,99,57,55),
-}local _0x2CFB = 0
-local _0xAC21 = 0
-local _0x151D
-local _0xE941
-if _0x2CFB > 0 and _0xAC21 > 0 then
-local _0x14D3 = _0xB9C7:GetChildren()
-local _0xE17D = _0x14D3[_0x2CFB]
-local _0xE401 = _0x14D3[_0xAC21]
-if _0xE17D and _0xE17D:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)) then _0x151D = _0xE17D end
-if _0xE401 and _0xE401:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)) then _0xE941 = _0xE401 end
-if not (_0x151D and _0xE941) then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,70,65,76,76,66,65,67,75,32,105,110,100,101,120,101,115,32,97,114,101,32,110,111,116,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110,115,32,45,32,117,115,101,32,67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83))
+
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+
+local Player = Players.LocalPlayer
+
+-- ===================== FARM MENU =====================
+
+local function StartMenu()
+    local Players = game:GetService("Players")
+    local RS = game:GetService("ReplicatedStorage")
+    local UIS = game:GetService("UserInputService")
+
+    local Player = Players.LocalPlayer
+
+    local Library = require(
+        RS:WaitForChild("Framework"):WaitForChild("Library")
+    )
+
+    repeat task.wait() until Library.Loaded
+
+    local Coins = Library.Things:WaitForChild("Coins")
+
+    -- CONFIG
+
+    local SWITCH_HP = 1200000
+    local TARGET_HP = 67500000
+    local HP_TOLERANCE = 150000
+
+    -- Small pets: only coins closer than this (studs) are targeted,
+    -- unless the coin is a present that Dragon already brought under SWITCH_HP.
+    local MAX_DISTANCE = 250
+    local STUCK_TIMEOUT = 3          -- small pets: seconds without damage before re-selecting
+    local DRAGON_STUCK_TIMEOUT = 10  -- dragon: seconds without damage before re-selecting
+    local MAX_RESELECTS = 3          -- after this many re-selects, skip the coin
+    local DEBUG = false              -- true = print every step in Output
+
+    -- Stats tab: where diamonds / potions are read from (Library.Save.Get())
+    local DIAMONDS_KEY = "Diamonds"
+    local POTIONS_KEY = nil         -- nil = auto-detect a save key that contains "potion"
+
+    -- Empyrean Dragon (the big pet that brings presents under SWITCH_HP)
+    local DRAGON = "id8826989d86494944b29ccea1aaee5b19"
+
+    local SMALL_PETS = {
+        "idac3208aa4bb0470490796ab2937bd559",
+        "idb3493866ef804c64b420a8b4eee09a41",
+        "id07d9508d534546fcaea6fe009d623a08",
+        "id2f8b0c6b1d5048bea1ed9fa151904330",
+        "idd871a1edca5846df816684ff8438cdd0",
+        "idc35ae66dea0d4edf829a03ea780e095e",
+        "idacbf5e66e591432c97d10174dbb76b58",
+        "id7ac692d0219e4b69a7372f59dcbd4a3b",
+        "ide869c36c08444a19b5f6a20b1c198306",
+        "id54dbb5be2c9d4453a76ad10c6e51ec97",
+    }
+
+    -- REMOTES: learned with CALIBRATE REMOTES (SETUP tab) each time you execute
+    -- the script. Optional: type the two index numbers it prints in Output (F9)
+    -- here to skip calibrating. 0 = off.
+    local FALLBACK_EQUIP_INDEX = 0
+    local FALLBACK_UNEQUIP_INDEX = 0
+
+    local EquipRemote
+    local UnequipRemote
+
+    if FALLBACK_EQUIP_INDEX > 0 and FALLBACK_UNEQUIP_INDEX > 0 then
+        local children = RS:GetChildren()
+        local e = children[FALLBACK_EQUIP_INDEX]
+        local u = children[FALLBACK_UNEQUIP_INDEX]
+
+        if e and e:IsA("RemoteFunction") then EquipRemote = e end
+        if u and u:IsA("RemoteFunction") then UnequipRemote = u end
+
+        if not (EquipRemote and UnequipRemote) then
+            warn("[AUTO FARM] FALLBACK indexes are not RemoteFunctions - use CALIBRATE REMOTES")
+        end
+    end
+
+    -- STATE
+
+    local enabled = false
+    local running = false
+
+    -- Presents that Dragon already brought below SWITCH_HP
+    local presents = {}
+
+    -- GUI
+
+    local TweenService = game:GetService("TweenService")
+
+    local THEME = {
+        bg = Color3.fromRGB(14, 16, 24),
+        title = Color3.fromRGB(19, 22, 33),
+        panel = Color3.fromRGB(24, 28, 41),
+        border = Color3.fromRGB(42, 48, 68),
+        text = Color3.fromRGB(235, 238, 246),
+        muted = Color3.fromRGB(135, 144, 168),
+        accent = Color3.fromRGB(86, 128, 255),
+        accent2 = Color3.fromRGB(155, 92, 255),
+        green = Color3.fromRGB(35, 155, 90),
+        red = Color3.fromRGB(180, 55, 65),
+        yellow = Color3.fromRGB(255, 200, 100),
+        blue = Color3.fromRGB(110, 190, 255),
+    }
+
+    local function New(class, props, parent)
+        local inst = Instance.new(class)
+
+        for k, v in pairs(props) do
+            inst[k] = v
+        end
+
+        inst.Parent = parent
+        return inst
+    end
+
+    local function Round(inst, radius)
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(0, radius)
+        c.Parent = inst
+        return c
+    end
+
+    local function Stroke(inst, color, thickness)
+        local s = Instance.new("UIStroke")
+        s.Color = color
+        s.Thickness = thickness
+        s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        s.Parent = inst
+        return s
+    end
+
+    local function Gradient(inst, c1, c2)
+        local g = Instance.new("UIGradient")
+        g.Color = ColorSequence.new(c1, c2)
+        g.Parent = inst
+        return g
+    end
+
+    local function Tween(inst, time, props)
+        TweenService:Create(
+            inst,
+            TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            props
+        ):Play()
+    end
+
+    local FRAME_W = 520
+    local FRAME_H = 440
+    local PAGE_Y = 90
+    local PAGE_H = FRAME_H - PAGE_Y - 36
+
+    local ui = { tabs = {}, pages = {}, t = {} }
+
+    do
+        local old = Player:WaitForChild("PlayerGui"):FindFirstChild("EmpyreanDragonAutoFarm")
+
+        if old then
+            old:Destroy()
+        end
+    end
+
+    local gui = New("ScreenGui", {
+        Name = "EmpyreanDragonAutoFarm",
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+    }, Player:WaitForChild("PlayerGui"))
+
+    local frame = New("Frame", {
+        Size = UDim2.fromOffset(FRAME_W, FRAME_H),
+        Position = UDim2.new(0.5, -FRAME_W / 2, 0.5, -FRAME_H / 2),
+        BackgroundColor3 = THEME.bg,
+        BorderSizePixel = 0,
+        Active = true,
+        ClipsDescendants = true,
+    }, gui)
+
+    Round(frame, 14)
+    Stroke(frame, THEME.border, 1.5)
+
+    -- title bar
+
+    local titleBar = New("Frame", {
+        Size = UDim2.new(1, 0, 0, 46),
+        BackgroundColor3 = THEME.title,
+        BorderSizePixel = 0,
+    }, frame)
+
+    ui.dot = New("Frame", {
+        Size = UDim2.fromOffset(10, 10),
+        Position = UDim2.fromOffset(16, 18),
+        BackgroundColor3 = THEME.muted,
+        BorderSizePixel = 0,
+    }, titleBar)
+
+    Round(ui.dot, 5)
+
+    local header = New("TextLabel", {
+        Size = UDim2.new(1, -90, 1, 0),
+        Position = UDim2.fromOffset(36, 0),
+        BackgroundTransparency = 1,
+        Text = "EMPYREAN DRAGON AUTO FARM",
+        TextColor3 = THEME.text,
+        Font = Enum.Font.GothamBold,
+        TextSize = 17,
+        TextXAlignment = Enum.TextXAlignment.Left,
+    }, titleBar)
+
+    local close = New("TextButton", {
+        Size = UDim2.fromOffset(28, 28),
+        Position = UDim2.new(1, -40, 0, 9),
+        BackgroundColor3 = THEME.red,
+        Text = "X",
+        TextColor3 = Color3.new(1, 1, 1),
+        Font = Enum.Font.GothamBold,
+        TextSize = 14,
+    }, titleBar)
+
+    Round(close, 7)
+
+    Gradient(New("Frame", {
+        Size = UDim2.new(1, 0, 0, 2),
+        Position = UDim2.fromOffset(0, 46),
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderSizePixel = 0,
+    }, frame), THEME.accent, THEME.accent2)
+
+    -- tabs
+
+    local tabBar = New("Frame", {
+        Position = UDim2.fromOffset(0, 48),
+        Size = UDim2.new(1, 0, 0, 38),
+        BackgroundColor3 = THEME.title,
+        BorderSizePixel = 0,
+    }, frame)
+
+    ui.indicator = New("Frame", {
+        Size = UDim2.new(1 / 3, -24, 0, 3),
+        Position = UDim2.new(0, 12, 1, -3),
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderSizePixel = 0,
+    }, tabBar)
+
+    Round(ui.indicator, 2)
+    Gradient(ui.indicator, THEME.accent, THEME.accent2)
+
+    for i, name in ipairs({ "FARM", "STATS", "SETUP" }) do
+        ui.tabs[i] = New("TextButton", {
+            Position = UDim2.new((i - 1) / 3, 0, 0, 0),
+            Size = UDim2.new(1 / 3, 0, 1, -3),
+            BackgroundTransparency = 1,
+            AutoButtonColor = false,
+            Text = name,
+            Font = Enum.Font.GothamBold,
+            TextSize = 13,
+            TextColor3 = THEME.muted,
+        }, tabBar)
+
+        ui.pages[i] = New("Frame", {
+            Position = UDim2.fromOffset(0, PAGE_Y),
+            Size = UDim2.new(1, 0, 0, PAGE_H),
+            BackgroundTransparency = 1,
+            Visible = (i == 1),
+        }, frame)
+    end
+
+    local function ShowTab(index)
+        for i = 1, 3 do
+            ui.pages[i].Visible = (i == index)
+            ui.tabs[i].TextColor3 = (i == index) and THEME.text or THEME.muted
+        end
+
+        Tween(ui.indicator, 0.2, { Position = UDim2.new((index - 1) / 3, 12, 1, -3) })
+    end
+
+    for i = 1, 3 do
+        ui.tabs[i].MouseButton1Click:Connect(function()
+            ShowTab(i)
+        end)
+    end
+
+    ShowTab(1)
+
+    -- footer (always shows the latest status, whichever tab is open)
+
+    local footerBar = New("Frame", {
+        Position = UDim2.fromOffset(0, FRAME_H - 36),
+        Size = UDim2.new(1, 0, 0, 36),
+        BackgroundColor3 = THEME.title,
+        BorderSizePixel = 0,
+    }, frame)
+
+    ui.footer = New("TextLabel", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(16, 0),
+        Size = UDim2.new(1, -32, 1, 0),
+        Text = "Ready",
+        Font = Enum.Font.GothamMedium,
+        TextSize = 12,
+        TextColor3 = THEME.muted,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextTruncate = Enum.TextTruncate.AtEnd,
+    }, footerBar)
+
+    -- widgets
+
+    local function MakeCard(parent, y, color)
+        local card = New("Frame", {
+            Position = UDim2.fromOffset(12, y),
+            Size = UDim2.new(1, -24, 0, 38),
+            BackgroundColor3 = THEME.panel,
+            BorderSizePixel = 0,
+        }, parent)
+
+        Round(card, 9)
+        Stroke(card, THEME.border, 1)
+
+        return New("TextLabel", {
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(14, 0),
+            Size = UDim2.new(1, -28, 1, 0),
+            Text = "",
+            Font = Enum.Font.GothamMedium,
+            TextSize = 13,
+            TextColor3 = color,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            TextTruncate = Enum.TextTruncate.AtEnd,
+        }, card)
+    end
+
+    -- stat tile: 3 per row. Returns the value label.
+    local function MakeTile(parent, col, y, caption, color)
+        local w = (FRAME_W - 24 - 16) / 3
+
+        local f = New("Frame", {
+            Position = UDim2.fromOffset(12 + col * (w + 8), y),
+            Size = UDim2.fromOffset(w, 76),
+            BackgroundColor3 = THEME.panel,
+            BorderSizePixel = 0,
+        }, parent)
+
+        Round(f, 10)
+        Stroke(f, THEME.border, 1)
+
+        Round(New("Frame", {
+            Size = UDim2.new(1, -24, 0, 2),
+            Position = UDim2.fromOffset(12, 0),
+            BackgroundColor3 = color,
+            BorderSizePixel = 0,
+        }, f), 1)
+
+        New("TextLabel", {
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(12, 10),
+            Size = UDim2.new(1, -24, 0, 14),
+            Text = caption,
+            Font = Enum.Font.GothamMedium,
+            TextSize = 11,
+            TextColor3 = THEME.muted,
+            TextXAlignment = Enum.TextXAlignment.Left,
+        }, f)
+
+        return New("TextLabel", {
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(12, 28),
+            Size = UDim2.new(1, -24, 0, 38),
+            Text = "0",
+            Font = Enum.Font.GothamBold,
+            TextSize = 22,
+            TextColor3 = color,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            TextTruncate = Enum.TextTruncate.AtEnd,
+        }, f)
+    end
+
+    -- FARM page
+
+    local toggle = New("TextButton", {
+        Position = UDim2.fromOffset(12, 10),
+        Size = UDim2.new(1, -24, 0, 48),
+        BackgroundColor3 = THEME.green,
+        AutoButtonColor = false,
+        Text = "START FARM",
+        TextColor3 = Color3.new(1, 1, 1),
+        Font = Enum.Font.GothamBold,
+        TextSize = 16,
+    }, ui.pages[1])
+
+    Round(toggle, 10)
+
+    local status = MakeCard(ui.pages[1], 68, THEME.text)
+    status.Text = "Status: Stopped"
+
+    local petStatus = MakeCard(ui.pages[1], 112, THEME.blue)
+    petStatus.Text = "Pets: None"
+
+    local hpStatus = MakeCard(ui.pages[1], 156, THEME.yellow)
+    hpStatus.Text = "Present HP: Waiting"
+
+    ui.t.miniPresents = MakeTile(ui.pages[1], 0, 206, "PRESENTS DESTROYED", THEME.green)
+    ui.t.miniCycles = MakeTile(ui.pages[1], 1, 206, "CYCLES", THEME.accent)
+    ui.t.miniDph = MakeTile(ui.pages[1], 2, 206, "DIAMONDS / HOUR", THEME.blue)
+
+    -- STATS page
+
+    ui.t.presents = MakeTile(ui.pages[2], 0, 10, "PRESENTS DESTROYED", THEME.green)
+    ui.t.cycles = MakeTile(ui.pages[2], 1, 10, "CYCLES", THEME.accent)
+    ui.t.uptime = MakeTile(ui.pages[2], 2, 10, "FARM TIME", THEME.text)
+
+    ui.t.diamonds = MakeTile(ui.pages[2], 0, 94, "DIAMONDS EARNED", THEME.blue)
+    ui.t.dph = MakeTile(ui.pages[2], 1, 94, "DIAMONDS / HOUR", THEME.blue)
+    ui.t.dpc = MakeTile(ui.pages[2], 2, 94, "DIAMONDS / CYCLE", THEME.blue)
+
+    ui.t.potions = MakeTile(ui.pages[2], 0, 178, "POTIONS GAINED", THEME.accent2)
+    ui.t.ptph = MakeTile(ui.pages[2], 1, 178, "POTIONS / HOUR", THEME.accent2)
+    ui.t.pph = MakeTile(ui.pages[2], 2, 178, "PRESENTS / HOUR", THEME.green)
+
+    ui.resetBtn = New("TextButton", {
+        Position = UDim2.fromOffset(12, 262),
+        Size = UDim2.new(1, -24, 0, 38),
+        BackgroundColor3 = THEME.panel,
+        AutoButtonColor = false,
+        Text = "RESET STATS",
+        TextColor3 = THEME.muted,
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, ui.pages[2])
+
+    Round(ui.resetBtn, 9)
+    Stroke(ui.resetBtn, THEME.border, 1)
+
+    -- SETUP page
+
+    local calibrateBtn = New("TextButton", {
+        Position = UDim2.fromOffset(12, 10),
+        Size = UDim2.new(1, -24, 0, 40),
+        BackgroundColor3 = Color3.fromRGB(60, 90, 150),
+        AutoButtonColor = false,
+        Text = "CALIBRATE REMOTES",
+        TextColor3 = Color3.new(1, 1, 1),
+        Font = Enum.Font.GothamBold,
+        TextSize = 14,
+    }, ui.pages[3])
+
+    Round(calibrateBtn, 9)
+
+    New("TextLabel", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(14, 100),
+        Size = UDim2.new(1, -28, 0, 40),
+        Text = "Press CALIBRATE, then EQUIP the dragon by hand and UNEQUIP it by hand (keep a slot free). Check with TEST, then START. SWAP flips equip/unequip if TEST shows the opposite. Or type the indexes above + APPLY.",
+        Font = Enum.Font.Gotham,
+        TextSize = 12,
+        TextColor3 = THEME.muted,
+        TextWrapped = true,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+    }, ui.pages[3])
+
+    ui.printKeysBtn = New("TextButton", {
+        Position = UDim2.fromOffset(12, 150),
+        Size = UDim2.new(1, -24, 0, 34),
+        BackgroundColor3 = THEME.panel,
+        AutoButtonColor = false,
+        Text = "PRINT SAVE KEYS (Output) - helps find diamonds / potions",
+        TextColor3 = THEME.muted,
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, ui.pages[3])
+
+    Round(ui.printKeysBtn, 9)
+    Stroke(ui.printKeysBtn, THEME.border, 1)
+
+    ui.trackInfo = New("TextLabel", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(14, 194),
+        Size = UDim2.new(1, -28, 0, 40),
+        Text = "Diamonds: not read yet   |   Potions: not read yet",
+        Font = Enum.Font.Gotham,
+        TextSize = 12,
+        TextColor3 = THEME.muted,
+        TextWrapped = true,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+    }, ui.pages[3])
+
+    local halfW = (FRAME_W - 24 - 8) / 2
+
+    ui.testBtn = New("TextButton", {
+        Position = UDim2.fromOffset(12, 240),
+        Size = UDim2.fromOffset(halfW, 34),
+        BackgroundColor3 = THEME.panel,
+        AutoButtonColor = false,
+        Text = "TEST (equip + unequip dragon)",
+        TextColor3 = THEME.muted,
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, ui.pages[3])
+
+    Round(ui.testBtn, 9)
+    Stroke(ui.testBtn, THEME.border, 1)
+
+    ui.swapBtn = New("TextButton", {
+        Position = UDim2.fromOffset(12 + halfW + 8, 240),
+        Size = UDim2.fromOffset(halfW, 34),
+        BackgroundColor3 = THEME.panel,
+        AutoButtonColor = false,
+        Text = "SWAP equip <-> unequip",
+        TextColor3 = THEME.muted,
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, ui.pages[3])
+
+    Round(ui.swapBtn, 9)
+    Stroke(ui.swapBtn, THEME.border, 1)
+
+    local function SetStatus(value)
+        status.Text = "Status: " .. value
+        ui.footer.Text = value
+
+        local low = string.lower(value)
+        local color = THEME.muted
+
+        if string.find(low, "error", 1, true)
+            or string.find(low, "fail", 1, true)
+            or string.find(low, "missing", 1, true)
+            or string.find(low, "not a ", 1, true) then
+            color = Color3.fromRGB(235, 87, 87)
+        elseif string.find(low, "calibrating", 1, true)
+            or string.find(low, "equip found", 1, true)
+            or string.find(low, "re-select", 1, true)
+            or string.find(low, "skipped", 1, true)
+            or string.find(low, "nothing detected", 1, true) then
+            color = THEME.yellow
+        elseif string.find(low, "destroyed", 1, true)
+            or string.find(low, "ready", 1, true)
+            or string.find(low, "calibrated", 1, true)
+            or string.find(low, "applied", 1, true) then
+            color = Color3.fromRGB(46, 204, 113)
+        end
+
+        ui.footer.TextColor3 = color
+
+        if DEBUG then
+            print("[AUTO FARM] " .. value)
+        end
+    end
+
+    local function SetPet(value)
+        petStatus.Text = "Pets: " .. value
+        if DEBUG then print("[AUTO FARM PETS] " .. value) end
+    end
+
+    local function Debug(...)
+        if DEBUG then
+            print("[AUTO FARM DEBUG]", ...)
+        end
+    end
+
+    -- CALIBRATION
+    -- Press CALIBRATE, then EQUIP the dragon (or any farm pet) by hand and
+    -- UNEQUIP it by hand. The hook is installed on the first press only; while
+    -- calibration is off it is a plain pass-through (no lag).
+    -- First pet call seen = EQUIP remote, first call on a different remote =
+    -- UNEQUIP remote. Only calls made with one of YOUR farm pet UIDs count.
+
+    local KNOWN = { [DRAGON] = true }
+
+    for _, id in ipairs(SMALL_PETS) do
+        KNOWN[id] = true
+    end
+
+    local calibrating = 0 -- 0 = off, 1 = waiting for equip, 2 = waiting for unequip
+    local calibToken = 0
+    local prevEquip
+    local prevUnequip
+    local hookInstalled = false
+    local oldNamecall
+    local testing = false
+
+    local function RemoteIndex(remote)
+        return tostring(table.find(RS:GetChildren(), remote))
+    end
+
+    local function Learn(remote, uid)
+        if calibrating == 0 or not KNOWN[uid] then return end
+
+        if calibrating == 1 then
+            EquipRemote = remote
+            calibrating = 2
+            print("[CALIBRATE] EQUIP remote index=" .. RemoteIndex(remote))
+            SetStatus("Equip found - now UNEQUIP that pet by hand")
+        elseif remote ~= EquipRemote then
+            UnequipRemote = remote
+            calibrating = 0
+            print("[CALIBRATE] UNEQUIP remote index=" .. RemoteIndex(remote))
+            print("[CALIBRATE] DONE - equip=" .. RemoteIndex(EquipRemote) .. " unequip=" .. RemoteIndex(UnequipRemote)
+                .. " (optional: put them in FALLBACK_EQUIP_INDEX / FALLBACK_UNEQUIP_INDEX)")
+            SetStatus("Calibrated - press TEST, then START")
+        end
+    end
+
+    local function InstallHook()
+        if hookInstalled then return true end
+        if not (hookmetamethod and getnamecallmethod) then return false end
+
+        local wrap = newcclosure or function(f) return f end
+
+        local ok = pcall(function()
+            oldNamecall = hookmetamethod(game, "__namecall", wrap(function(self, ...)
+                if calibrating == 0 then
+                    return oldNamecall(self, ...)
+                end
+
+                local method = getnamecallmethod()
+
+                if method == "InvokeServer"
+                    and typeof(self) == "Instance"
+                    and self.ClassName == "RemoteFunction" then
+
+                    local first = ...
+
+                    if type(first) == "string" and KNOWN[first] then
+                        task.defer(Learn, self, first)
+                    end
+                end
+
+                if setnamecallmethod then
+                    setnamecallmethod(method)
+                end
+
+                return oldNamecall(self, ...)
+            end))
+        end)
+
+        hookInstalled = ok
+        return ok
+    end
+
+    local function StartCalibration()
+        if enabled then
+            SetStatus("Stop the farm before calibrating")
+            return
+        end
+
+        if not InstallHook() then
+            SetStatus("Hook not supported - use the # boxes")
+            return
+        end
+
+        prevEquip = EquipRemote
+        prevUnequip = UnequipRemote
+        EquipRemote = nil
+        UnequipRemote = nil
+        calibrating = 1
+
+        calibToken = calibToken + 1
+        local token = calibToken
+
+        SetStatus("Calibrating - EQUIP the dragon by hand, then UNEQUIP it")
+
+        task.delay(60, function()
+            if calibToken == token and calibrating ~= 0 then
+                calibrating = 0
+                EquipRemote = prevEquip
+                UnequipRemote = prevUnequip
+                SetStatus("Nothing detected - old remotes kept (equip and unequip need different remotes)")
+            end
+        end)
+    end
+
+    calibrateBtn.MouseButton1Click:Connect(function()
+        local ok, err = pcall(StartCalibration)
+
+        if not ok then
+            calibrating = 0
+            EquipRemote = prevEquip
+            UnequipRemote = prevUnequip
+            warn("[CALIBRATE ERROR]", err)
+            SetStatus("ERROR in calibrate: " .. tostring(err))
+        end
+    end)
+
+    -- TEST: equips the dragon, waits 3 s, unequips it. Watch the game.
+    ui.testBtn.MouseButton1Click:Connect(function()
+        if enabled then
+            SetStatus("Stop the farm first")
+            return
+        end
+
+        if calibrating ~= 0 then
+            SetStatus("Finish calibration first")
+            return
+        end
+
+        if not (EquipRemote and UnequipRemote) then
+            SetStatus("Remotes missing - press CALIBRATE")
+            return
+        end
+
+        if testing then return end
+        testing = true
+
+        task.spawn(function()
+            SetStatus("Test: equipping the dragon...")
+
+            local ok1, r1 = pcall(function()
+                return EquipRemote:InvokeServer(DRAGON)
+            end)
+
+            print("[TEST] equip ->", ok1, r1)
+            task.wait(3)
+
+            SetStatus("Test: unequipping the dragon...")
+
+            local ok2, r2 = pcall(function()
+                return UnequipRemote:InvokeServer(DRAGON)
+            end)
+
+            print("[TEST] unequip ->", ok2, r2)
+            task.wait(1)
+
+            if ok1 and ok2 then
+                SetStatus("Test done - dragon should have appeared then vanished; if not, press SWAP")
+            else
+                SetStatus("Test error - see Output (F9); try SWAP or CALIBRATE again")
+            end
+
+            testing = false
+        end)
+    end)
+
+    -- SWAP: flips the two remotes (use it if TEST shows the opposite)
+    ui.swapBtn.MouseButton1Click:Connect(function()
+        if enabled then
+            SetStatus("Stop the farm first")
+            return
+        end
+
+        if not (EquipRemote and UnequipRemote) then
+            SetStatus("Remotes missing - press CALIBRATE")
+            return
+        end
+
+        EquipRemote, UnequipRemote = UnequipRemote, EquipRemote
+        print("[SWAP] equip index=" .. RemoteIndex(EquipRemote) .. " unequip index=" .. RemoteIndex(UnequipRemote))
+        SetStatus("Swapped - run TEST again")
+    end)
+
+    -- Manual fallback: index numbers (ReplicatedStorage:GetChildren()[n])
+
+    local function MakeIdxBox(placeholder, x)
+        local f = New("Frame", {
+            Size = UDim2.fromOffset(150, 34),
+            Position = UDim2.fromOffset(x, 60),
+            BackgroundColor3 = Color3.fromRGB(30, 34, 46),
+            BorderSizePixel = 0,
+        }, ui.pages[3])
+
+        Round(f, 7)
+
+        return New("TextBox", {
+            Size = UDim2.new(1, -10, 1, 0),
+            Position = UDim2.fromOffset(5, 0),
+            BackgroundTransparency = 1,
+            Text = "",
+            PlaceholderText = placeholder,
+            PlaceholderColor3 = Color3.fromRGB(130, 138, 160),
+            TextColor3 = Color3.new(1, 1, 1),
+            Font = Enum.Font.GothamMedium,
+            TextSize = 12,
+            ClearTextOnFocus = false,
+        }, f)
+    end
+
+    local equipIdxBox = MakeIdxBox("Equip #", 12)
+    local unequipIdxBox = MakeIdxBox("Unequip #", 170)
+
+    local applyBtn = New("TextButton", {
+        Size = UDim2.new(1, -340, 0, 34),
+        Position = UDim2.fromOffset(328, 60),
+        BackgroundColor3 = Color3.fromRGB(35, 155, 90),
+        Text = "APPLY",
+        TextColor3 = Color3.new(1, 1, 1),
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, ui.pages[3])
+
+    Round(applyBtn, 7)
+
+    applyBtn.MouseButton1Click:Connect(function()
+        if enabled then
+            SetStatus("Stop the farm first")
+            return
+        end
+
+        local e = tonumber(equipIdxBox.Text)
+        local u = tonumber(unequipIdxBox.Text)
+
+        if not e or not u then
+            SetStatus("Type both index numbers")
+            return
+        end
+
+        local list = RS:GetChildren()
+        local er = list[e]
+        local ur = list[u]
+
+        if not (er and er:IsA("RemoteFunction")) then
+            SetStatus("#" .. e .. " is not a RemoteFunction")
+            return
+        end
+
+        if not (ur and ur:IsA("RemoteFunction")) then
+            SetStatus("#" .. u .. " is not a RemoteFunction")
+            return
+        end
+
+        EquipRemote = er
+        UnequipRemote = ur
+        calibrating = 0
+        calibToken = calibToken + 1
+
+        SetStatus("Indexes applied - press START")
+    end)
+
+    -- DRAG GUI
+
+    local dragging = false
+    local dragStart
+    local startPosition
+
+    header.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+            or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPosition = frame.Position
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if dragging
+            and (input.UserInputType == Enum.UserInputType.MouseMovement
+                or input.UserInputType == Enum.UserInputType.Touch) then
+
+            local delta = input.Position - dragStart
+
+            frame.Position = UDim2.new(
+                startPosition.X.Scale,
+                startPosition.X.Offset + delta.X,
+                startPosition.Y.Scale,
+                startPosition.Y.Offset + delta.Y
+            )
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+            or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    -- STATS + TRACKER
+
+    local stats = {
+        presents = 0,
+        cycles = 0,
+        diamonds = 0,
+        potions = 0,
+        seconds = 0,          -- time the farm was running
+        hasDiamonds = nil,    -- nil = not read yet, false = not found
+        hasPotions = nil,
+        lastDiamonds = nil,
+        lastPotions = nil,
+        potionsKey = nil,
+    }
+
+    local function FormatNumber(n)
+        if n >= 1e9 then
+            return string.format("%.2fB", n / 1e9)
+        elseif n >= 1e6 then
+            return string.format("%.2fM", n / 1e6)
+        elseif n >= 1e3 then
+            return string.format("%.1fK", n / 1e3)
+        elseif n == math.floor(n) then
+            return string.format("%d", n)
+        end
+
+        return string.format("%.1f", n)
+    end
+
+    local function FormatTime(sec)
+        sec = math.floor(sec)
+        return string.format("%02d:%02d:%02d", sec // 3600, (sec % 3600) // 60, sec % 60)
+    end
+
+    local function SetText(label, text)
+        if label.Text ~= text then
+            label.Text = text
+        end
+    end
+
+    local function RateText(amount, available, decimals)
+        if available == false then return "N/A" end
+        if stats.seconds < 15 then return "..." end
+
+        local rate = amount / (stats.seconds / 3600)
+
+        if decimals then
+            return string.format("%." .. decimals .. "f", rate)
+        end
+
+        return FormatNumber(rate)
+    end
+
+    local function UpdateStats()
+        local t = ui.t
+
+        local diamondsText = (stats.hasDiamonds == false) and "N/A" or FormatNumber(stats.diamonds)
+        local potionsText = (stats.hasPotions == false) and "N/A" or FormatNumber(stats.potions)
+        local dph = RateText(stats.diamonds, stats.hasDiamonds)
+
+        local perCycle = "-"
+
+        if stats.hasDiamonds == false then
+            perCycle = "N/A"
+        elseif stats.cycles > 0 then
+            perCycle = FormatNumber(stats.diamonds / stats.cycles)
+        end
+
+        SetText(t.presents, tostring(stats.presents))
+        SetText(t.cycles, tostring(stats.cycles))
+        SetText(t.uptime, FormatTime(stats.seconds))
+        SetText(t.diamonds, diamondsText)
+        SetText(t.dph, dph)
+        SetText(t.dpc, perCycle)
+        SetText(t.potions, potionsText)
+        SetText(t.ptph, RateText(stats.potions, stats.hasPotions))
+        SetText(t.pph, RateText(stats.presents, true, 1))
+
+        SetText(t.miniPresents, tostring(stats.presents))
+        SetText(t.miniCycles, tostring(stats.cycles))
+        SetText(t.miniDph, dph)
+
+        local dInfo = (stats.hasDiamonds == nil) and "not read yet" or (stats.hasDiamonds and "found" or "NOT FOUND")
+        local pInfo = (stats.hasPotions == nil) and "not read yet" or (stats.hasPotions and ("found (" .. tostring(stats.potionsKey or POTIONS_KEY) .. ")") or "NOT FOUND")
+
+        SetText(ui.trackInfo, "Diamonds: " .. dInfo .. "   |   Potions: " .. pInfo)
+    end
+
+    -- numbers are read from the game's save data, read-only
+    local function GetSave()
+        local ok, save = pcall(function()
+            return Library.Save.Get()
+        end)
+
+        if ok and type(save) == "table" then
+            return save
+        end
+
+        return nil
+    end
+
+    local function CountItems(v)
+        if type(v) == "number" then
+            return v
+        end
+
+        if type(v) ~= "table" then
+            return nil
+        end
+
+        local total = 0
+
+        for _, item in pairs(v) do
+            if type(item) == "number" then
+                total = total + item
+            elseif type(item) == "table" then
+                total = total + (tonumber(item._am) or tonumber(item.Amount) or tonumber(item.amount) or tonumber(item.Count) or 1)
+            else
+                total = total + 1
+            end
+        end
+
+        return total
+    end
+
+    local function ReadDiamonds(save)
+        if save and type(save[DIAMONDS_KEY]) == "number" then
+            return save[DIAMONDS_KEY]
+        end
+
+        -- fallback: a leaderstat with "diamond" in its name
+        local ok, value = pcall(function()
+            local ls = Player:FindFirstChild("leaderstats")
+
+            if not ls then return nil end
+
+            for _, child in ipairs(ls:GetChildren()) do
+                if string.find(string.lower(child.Name), "diamond", 1, true)
+                    and type(child.Value) == "number" then
+                    return child.Value
+                end
+            end
+
+            return nil
+        end)
+
+        if ok then
+            return value
+        end
+
+        return nil
+    end
+
+    local function ReadPotions(save)
+        if not save then return nil end
+
+        local key = POTIONS_KEY or stats.potionsKey
+
+        if not key then
+            for k, v in pairs(save) do
+                if type(k) == "string"
+                    and string.find(string.lower(k), "potion", 1, true)
+                    and (type(v) == "table" or type(v) == "number") then
+
+                    key = k
+                    stats.potionsKey = k
+                    break
+                end
+            end
+        end
+
+        if key then
+            return CountItems(save[key])
+        end
+
+        return nil
+    end
+
+    -- called once per second (only counts while the farm is running)
+    local function TrackerTick(dt)
+        if not enabled then
+            stats.lastDiamonds = nil
+            stats.lastPotions = nil
+            return
+        end
+
+        stats.seconds = stats.seconds + dt
+
+        local save = GetSave()
+
+        local d = ReadDiamonds(save)
+        stats.hasDiamonds = (d ~= nil)
+
+        if d then
+            if stats.lastDiamonds and d > stats.lastDiamonds then
+                stats.diamonds = stats.diamonds + (d - stats.lastDiamonds)
+            end
+
+            stats.lastDiamonds = d
+        end
+
+        local p = ReadPotions(save)
+        stats.hasPotions = (p ~= nil)
+
+        if p then
+            if stats.lastPotions and p > stats.lastPotions then
+                stats.potions = stats.potions + (p - stats.lastPotions)
+            end
+
+            stats.lastPotions = p
+        end
+    end
+
+    local function Pulse(label, size)
+        label.TextSize = size + 6
+        Tween(label, 0.3, { TextSize = size })
+    end
+
+    local function OnPresentDestroyed()
+        stats.presents = stats.presents + 1
+        UpdateStats()
+        Pulse(ui.t.presents, 22)
+        Pulse(ui.t.miniPresents, 22)
+    end
+
+    local function OnCycleDone()
+        stats.cycles = stats.cycles + 1
+        UpdateStats()
+        Pulse(ui.t.cycles, 22)
+        Pulse(ui.t.miniCycles, 22)
+    end
+
+    ui.resetBtn.MouseButton1Click:Connect(function()
+        stats.presents = 0
+        stats.cycles = 0
+        stats.diamonds = 0
+        stats.potions = 0
+        stats.seconds = 0
+        stats.lastDiamonds = nil
+        stats.lastPotions = nil
+
+        UpdateStats()
+        SetStatus("Stats reset")
+    end)
+
+    ui.printKeysBtn.MouseButton1Click:Connect(function()
+        local save = GetSave()
+
+        if not save then
+            SetStatus("Save data not available (Library.Save.Get)")
+            return
+        end
+
+        print("[STATS] ---- top-level keys of your save ----")
+
+        for k, v in pairs(save) do
+            local info = type(v)
+
+            if type(v) == "table" then
+                local n = 0
+
+                for _ in pairs(v) do
+                    n = n + 1
+                end
+
+                info = "table (" .. n .. " entries)"
+            elseif type(v) == "number" then
+                info = "number = " .. tostring(v)
+            end
+
+            print("[STATS]", tostring(k), info)
+        end
+
+        for _, k in ipairs({ "BoostsInventory", "Boosts" }) do
+            print("[STATS] ---- " .. k .. " ----")
+
+            if type(save[k]) == "table" then
+                for a, b in pairs(save[k]) do
+                    local shown = tostring(b)
+
+                    if type(b) == "table" then
+                        local parts = {}
+
+                        for kk, vv in pairs(b) do
+                            table.insert(parts, tostring(kk) .. "=" .. tostring(vv))
+                        end
+
+                        shown = "{" .. table.concat(parts, ", ") .. "}"
+                    end
+
+                    print("[STATS]", tostring(a), shown)
+                end
+            end
+        end
+
+        SetStatus("Save keys printed in Output (F9)")
+    end)
+
+    task.spawn(function()
+        local lastTick = os.clock()
+
+        while gui.Parent do
+            task.wait(1)
+
+            local now = os.clock()
+            local dt = now - lastTick
+            lastTick = now
+
+            pcall(TrackerTick, dt)
+            pcall(UpdateStats)
+        end
+    end)
+
+    UpdateStats()
+
+    -- title-bar dot: green while the farm runs
+    task.spawn(function()
+        while gui.Parent do
+            ui.dot.BackgroundColor3 = enabled and Color3.fromRGB(46, 204, 113) or THEME.muted
+            task.wait(0.5)
+        end
+    end)
+
+    -- PET REMOTES
+
+    -- quiet = true: no warning when the server refuses (e.g. unequipping a pet
+    -- that is not equipped). The result is still returned.
+    local function InvokeRemote(remote, petId, quiet)
+        if not enabled then return false end
+
+        if not remote then
+            warn("[AUTO FARM] Remote missing - press CALIBRATE REMOTES")
+            return false
+        end
+
+        local ok, result = pcall(function()
+            return remote:InvokeServer(petId)
+        end)
+
+        if not ok then
+            if not quiet then
+                warn("[AUTO FARM] Remote error:", result)
+            end
+
+            return false
+        end
+
+        if result == false then
+            if not quiet then
+                warn("[AUTO FARM] Pet action rejected:", petId)
+            end
+
+            return false
+        end
+
+        return true
+    end
+
+    -- true / false from the save, nil if the save can't be read
+    local function IsEquipped(id)
+        local save = GetSave()
+
+        if save and type(save.PetsEquipped) == "table" then
+            return save.PetsEquipped[id] ~= nil
+        end
+
+        return nil
+    end
+
+    local function EquipPet(id)
+        if not enabled then return false end
+
+        if InvokeRemote(EquipRemote, id) then
+            return true
+        end
+
+        -- the server errors when the pet is already equipped: that is fine
+        return IsEquipped(id) == true
+    end
+
+    -- result is ignored by the callers: the pet may simply not be equipped
+    local function UnequipPet(id)
+        return InvokeRemote(UnequipRemote, id, true)
+    end
+
+    local function EquipAllSmallPets()
+        local equippedCount = 0
+
+        for i, id in ipairs(SMALL_PETS) do
+            if not enabled then return false end
+
+            SetPet("Equipping " .. i .. "/" .. #SMALL_PETS)
+
+            if EquipPet(id) then
+                equippedCount = equippedCount + 1
+            else
+                warn("[AUTO FARM] Could not equip small pet", i, id)
+            end
+
+            task.wait(0.15)
+        end
+
+        if equippedCount == 0 then
+            return false
+        end
+
+        -- give the pets time to spawn next to the player before selecting a target
+        task.wait(2)
+        SetPet(equippedCount .. " small pets equipped")
+        return enabled
+    end
+
+    local function UnequipAllSmallPets()
+        for i, id in ipairs(SMALL_PETS) do
+            if not enabled then return false end
+
+            SetPet("Unequipping " .. i .. "/" .. #SMALL_PETS)
+            UnequipPet(id)
+
+            task.wait(0.15)
+        end
+
+        return true
+    end
+
+    -- HELPERS
+
+    local function GetHealth(coin)
+        if not coin or not coin.Parent then return nil end
+
+        local hp = coin:GetAttribute("Health")
+
+        if typeof(hp) == "number" then
+            return hp
+        end
+
+        return nil
+    end
+
+    local function GetRoot()
+        local char = Player.Character
+        return char and char:FindFirstChild("HumanoidRootPart")
+    end
+
+    local function GetCoinPosition(coin)
+        if not coin or not coin.Parent then return nil end
+
+        if coin:IsA("PVInstance") then
+            local ok, pivot = pcall(function()
+                return coin:GetPivot()
+            end)
+
+            if ok and pivot then
+                return pivot.Position
+            end
+        end
+
+        for _, d in ipairs(coin:GetDescendants()) do
+            if d:IsA("BasePart") then
+                return d.Position
+            end
+        end
+
+        return nil
+    end
+
+    local function GetDistance(coin)
+        local root = GetRoot()
+        local pos = GetCoinPosition(coin)
+
+        if root and pos then
+            return (root.Position - pos).Magnitude
+        end
+
+        return nil
+    end
+
+    -- TARGET SELECTION
+
+    local function SelectCoin(coin)
+        if not coin or not coin.Parent then return false end
+
+        local ok, err = pcall(function()
+            Library.Signal.Fire("Select Coin", coin)
+        end)
+
+        if not ok then
+            warn("[AUTO FARM] Select error:", err)
+            return false
+        end
+
+        return true
+    end
+
+    local function FindDragonTarget(processed)
+        local best
+        local bestDifference = math.huge
+
+        for _, coin in ipairs(Coins:GetChildren()) do
+            if not processed[coin] then
+                local hp = GetHealth(coin)
+
+                if hp and hp > SWITCH_HP then
+                    local difference = math.abs(hp - TARGET_HP)
+
+                    if difference <= HP_TOLERANCE
+                        and difference < bestDifference then
+
+                        best = coin
+                        bestDifference = difference
+                    end
+                end
+            end
+        end
+
+        return best
+    end
+
+    -- Presents brought down by Dragon come first, then only coins near the
+    -- player, nearest first.
+    local function FindSmallPetTarget(processed)
+        local best
+        local bestScore = math.huge
+
+        for _, coin in ipairs(Coins:GetChildren()) do
+            if not processed[coin] then
+                local hp = GetHealth(coin)
+
+                if hp and hp > 0 and hp < SWITCH_HP then
+                    local isPresent = presents[coin] == true
+                    local dist = GetDistance(coin) or 0
+
+                    if isPresent or dist <= MAX_DISTANCE then
+                        local score = dist
+
+                        if isPresent then
+                            score = score - 1000000
+                        end
+
+                        if score < bestScore then
+                            best = coin
+                            bestScore = score
+                        end
+                    end
+                end
+            end
+        end
+
+        return best
+    end
+
+    -- DRAGON PHASE
+
+    local function DragonPhase()
+        SetStatus("Preparing Dragon")
+
+        -- remove destroyed presents from the list
+        for coin in pairs(presents) do
+            if not coin.Parent then
+                presents[coin] = nil
+            end
+        end
+
+        if not UnequipAllSmallPets() then
+            return false
+        end
+
+        if not enabled then return false end
+
+        SetPet("Empyrean Dragon")
+
+        if not EquipPet(DRAGON) then
+            SetStatus("Dragon equip failed - press CALIBRATE again")
+            return false
+        end
+
+        task.wait(0.5)
+
+        local processed = {}
+
+        while enabled do
+            local coin = FindDragonTarget(processed)
+
+            if not coin then
+                break
+            end
+
+            SetStatus("Dragon attacking " .. coin.Name)
+
+            if not SelectCoin(coin) then
+                processed[coin] = true
+                task.wait(0.5)
+                continue
+            end
+
+            local success = false
+            local lastHp = nil
+            local lastProgress = os.clock()
+            local reselects = 0
+
+            while enabled and coin.Parent do
+                local hp = GetHealth(coin)
+
+                if hp then
+                    hpStatus.Text = "Present HP: " .. string.format("%.0f", hp)
+
+                    if hp <= SWITCH_HP then
+                        success = true
+                        break
+                    end
+
+                    if not lastHp or hp < lastHp then
+                        lastHp = hp
+                        lastProgress = os.clock()
+                        reselects = 0
+                    end
+                end
+
+                -- no damage for a while: select the coin again, give up after a few tries
+                if os.clock() - lastProgress >= DRAGON_STUCK_TIMEOUT then
+                    if reselects >= MAX_RESELECTS then
+                        warn("[AUTO FARM] Dragon is not damaging", coin.Name, "- skipping")
+                        break
+                    end
+
+                    reselects = reselects + 1
+                    SetStatus("Re-selecting " .. coin.Name .. " (" .. reselects .. "/" .. MAX_RESELECTS .. ")")
+                    SelectCoin(coin)
+
+                    lastProgress = os.clock()
+                end
+
+                task.wait(0.25)
+            end
+
+            if success then
+                presents[coin] = true
+                processed[coin] = true
+                Debug("Present ready for small pets:", coin.Name)
+            else
+                -- destroyed, skipped or stopped: never pick the same coin twice
+                processed[coin] = true
+
+                if coin.Parent then
+                    task.wait(0.5)
+                end
+            end
+        end
+
+        return enabled
+    end
+
+    -- SMALL PET PHASE
+
+    local function DestroyWithSmallPets(coin)
+        if not coin or not coin.Parent then return true end
+
+        local hp = GetHealth(coin)
+
+        if not hp or hp <= 0 then return true end
+        if hp >= SWITCH_HP then return false end
+
+        SetStatus("Small pets targeting " .. coin.Name)
+        SetPet(#SMALL_PETS .. " small pets attacking")
+
+        Debug("Target", coin.Name, "HP", hp, "Distance", GetDistance(coin))
+
+        SelectCoin(coin)
+
+        local previousHP = hp
+        local lastProgress = os.clock()
+        local reselects = 0
+
+        while enabled and coin.Parent do
+            task.wait(0.25)
+
+            hp = GetHealth(coin)
+
+            if not hp or hp <= 0 then
+                hpStatus.Text = "Present HP: Destroyed"
+                return true
+            end
+
+            hpStatus.Text = "Present HP: " .. string.format("%.0f", hp)
+
+            if hp < previousHP then
+                previousHP = hp
+                lastProgress = os.clock()
+                reselects = 0
+            end
+
+            -- no damage: select the coin again, and give up after a few tries
+            if os.clock() - lastProgress >= STUCK_TIMEOUT then
+                if reselects >= MAX_RESELECTS then
+                    warn("[AUTO FARM] Pets are not damaging", coin.Name, "- skipping")
+                    return false
+                end
+
+                reselects = reselects + 1
+                SetStatus("Re-selecting " .. coin.Name .. " (" .. reselects .. "/" .. MAX_RESELECTS .. ")")
+                SelectCoin(coin)
+
+                lastProgress = os.clock()
+            end
+        end
+
+        return not coin.Parent
+    end
+
+    local function SmallPetsPhase()
+        SetStatus("Switching to small pets")
+        SetPet("Unequipping dragon")
+
+        UnequipPet(DRAGON)
+
+        if not enabled then return false end
+
+        if not EquipAllSmallPets() then
+            return false
+        end
+
+        local processed = {}
+
+        while enabled do
+            local coin = FindSmallPetTarget(processed)
+
+            if not coin then
+                break
+            end
+
+            local destroyed = DestroyWithSmallPets(coin)
+
+            if not enabled then return false end
+
+            -- always mark as processed, so a stuck coin can't block the loop forever
+            processed[coin] = true
+
+            if destroyed or not coin.Parent then
+                OnPresentDestroyed()
+                SetStatus("Present destroyed")
+            else
+                SetStatus("Skipped " .. coin.Name)
+                task.wait(0.5)
+            end
+        end
+
+        return enabled
+    end
+
+    -- MAIN LOOP
+
+    local function MainFarm()
+        if running then return end
+        running = true
+
+        while enabled do
+            SetStatus("Starting Dragon phase")
+
+            if not DragonPhase() then
+                if not enabled then break end
+                SetStatus("Dragon phase retry")
+                task.wait(1)
+                continue
+            end
+
+            if not enabled then break end
+
+            if not SmallPetsPhase() then
+                if not enabled then break end
+                SetStatus("Small pets phase retry")
+                task.wait(1)
+                continue
+            end
+
+            if not enabled then break end
+
+            SetStatus("All presents destroyed")
+
+            UnequipAllSmallPets()
+
+            if not enabled then break end
+
+            OnCycleDone()
+            SetStatus("Preparing next Dragon cycle")
+            task.wait(0.5)
+        end
+
+        running = false
+        enabled = false
+
+        toggle.Text = "START FARM"
+        toggle.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
+
+        SetStatus("Stopped")
+        SetPet("None")
+        hpStatus.Text = "Present HP: Waiting"
+    end
+
+    -- BUTTONS
+
+    toggle.MouseButton1Click:Connect(function()
+        if enabled then
+            enabled = false
+
+            toggle.Text = "START FARM"
+            toggle.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
+
+            SetStatus("Stopping...")
+        else
+            if calibrating ~= 0 then
+                SetStatus("Finish calibration first")
+                return
+            end
+
+            if not (EquipRemote and UnequipRemote) then
+                SetStatus("Remotes missing - press CALIBRATE")
+                return
+            end
+
+            enabled = true
+
+            toggle.Text = "STOP FARM"
+            toggle.BackgroundColor3 = Color3.fromRGB(180, 55, 65)
+
+            SetStatus("Starting...")
+            task.spawn(function()
+                local ok, err = pcall(MainFarm)
+
+                if not ok then
+                    warn("[AUTO FARM CRASH]", err)
+                    enabled = false
+                    running = false
+                    toggle.Text = "START FARM"
+                    toggle.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
+                    SetStatus("ERROR - check Output")
+                end
+            end)
+        end
+    end)
+
+    close.MouseButton1Click:Connect(function()
+        enabled = false
+        gui:Destroy()
+    end)
+
+    if EquipRemote and UnequipRemote then
+        SetStatus("Ready")
+    else
+        SetStatus("Remotes missing - press CALIBRATE or type the # boxes")
+    end
 end
-endlocal _0x1DBD = false
-local _0x6625 = falselocal _0x9713 = {}local _0x4207 = game:GetService(string.char(84,119,101,101,110,83,101,114,118,105,99,101))
-local _0xF719 = {
-bg = Color3.fromRGB(14, 16, 24),
-title = Color3.fromRGB(19, 22, 33),
-panel = Color3.fromRGB(24, 28, 41),
-border = Color3.fromRGB(42, 48, 68),
-text = Color3.fromRGB(235, 238, 246),
-muted = Color3.fromRGB(135, 144, 168),
-accent = Color3.fromRGB(86, 128, 255),
-accent2 = Color3.fromRGB(155, 92, 255),
-green = Color3.fromRGB(35, 155, 90),
-red = Color3.fromRGB(180, 55, 65),
-yellow = Color3.fromRGB(255, 200, 100),
-blue = Color3.fromRGB(110, 190, 255),
+
+-- ===================== KEY SCREEN =====================
+
+-- HWID
+
+local function GetHWID()
+    local ok, id = pcall(function()
+        if gethwid then
+            return gethwid()
+        end
+
+        return nil
+    end)
+
+    if ok and type(id) == "string" and #id > 0 then
+        return id
+    end
+
+    local ok2, id2 = pcall(function()
+        return game:GetService("RbxAnalyticsService"):GetClientId()
+    end)
+
+    if ok2 and type(id2) == "string" and #id2 > 0 then
+        return id2
+    end
+
+    return nil
+end
+
+local HWID = GetHWID()
+
+-- THEME / HELPERS
+
+local THEME = {
+    bg = Color3.fromRGB(14, 16, 24),
+    title = Color3.fromRGB(19, 22, 33),
+    panel = Color3.fromRGB(24, 28, 41),
+    border = Color3.fromRGB(42, 48, 68),
+    text = Color3.fromRGB(235, 238, 246),
+    muted = Color3.fromRGB(135, 144, 168),
+    accent = Color3.fromRGB(86, 128, 255),
+    accent2 = Color3.fromRGB(155, 92, 255),
+    green = Color3.fromRGB(40, 190, 120),
+    red = Color3.fromRGB(226, 78, 90),
+    yellow = Color3.fromRGB(255, 196, 90),
 }
-local function _0x6442(class, props, parent)
-local _0x8C8D = Instance.new(class)
-for k, v in pairs(props) do
-_0x8C8D[k] = v
+
+local function New(class, props, parent)
+    local inst = Instance.new(class)
+
+    for k, v in pairs(props) do
+        inst[k] = v
+    end
+
+    inst.Parent = parent
+    return inst
 end
-_0x8C8D.Parent = parent
-return _0x8C8D
+
+local function Round(inst, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, radius)
+    c.Parent = inst
+    return c
 end
-local function _0x34AC(_0x8C8D, radius)
-local _0x15E8 = Instance.new(string.char(85,73,67,111,114,110,101,114))
-_0x15E8.CornerRadius = UDim.new(0, radius)
-_0x15E8.Parent = _0x8C8D
-return _0x15E8
+
+local function Stroke(inst, color, thickness)
+    local s = Instance.new("UIStroke")
+    s.Color = color
+    s.Thickness = thickness
+    s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    s.Parent = inst
+    return s
 end
-local function _0x4C8B(_0x8C8D, _0x832E, thickness)
-local _0xD5C8 = Instance.new(string.char(85,73,83,116,114,111,107,101))
-_0xD5C8.Color = _0x832E
-_0xD5C8.Thickness = thickness
-_0xD5C8.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-_0xD5C8.Parent = _0x8C8D
-return _0xD5C8
+
+local function Tween(inst, time, props)
+    TweenService:Create(
+        inst,
+        TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        props
+    ):Play()
 end
-local function _0x0041(_0x8C8D, c1, c2)
-local _0xE8C6 = Instance.new(string.char(85,73,71,114,97,100,105,101,110,116))
-_0xE8C6.Color = ColorSequence.new(c1, c2)
-_0xE8C6.Parent = _0x8C8D
-return _0xE8C6
+
+local function GetGuiParent()
+    local ok, ui = pcall(function()
+        return gethui and gethui()
+    end)
+
+    if ok and ui then
+        return ui
+    end
+
+    return Player:WaitForChild("PlayerGui")
 end
-local function _0x443A(_0x8C8D, time, props)
-_0x4207:Create(
-_0x8C8D,
-TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-props
-):Play()
+
+-- GUI
+
+local guiParent = GetGuiParent()
+local old = guiParent:FindFirstChild("EmpyreanDragonLoader")
+
+if old then
+    old:Destroy()
 end
-local _0x3152 = 520
-local _0x2114 = 440
-local _0xF1C4 = 90
-local _0xA377 = _0x2114 - _0xF1C4 - 36
-local _0xA2C1 = { tabs = {}, pages = {}, _0x5EC9 = {} }
+
+local gui = New("ScreenGui", {
+    Name = "EmpyreanDragonLoader",
+    ResetOnSpawn = false,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+}, guiParent)
+
+local window = New("Frame", {
+    Size = UDim2.fromOffset(340, 0),
+    AutomaticSize = Enum.AutomaticSize.Y,
+    Position = UDim2.new(0.5, -170, 0.5, -150),
+    BackgroundColor3 = THEME.bg,
+    BorderSizePixel = 0,
+    Active = true,
+    ClipsDescendants = true,
+}, gui)
+
+Round(window, 14)
+Stroke(window, THEME.border, 1.5)
+
+New("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, window)
+
+local titleBar = New("Frame", {
+    Size = UDim2.new(1, 0, 0, 46),
+    BackgroundColor3 = THEME.title,
+    BorderSizePixel = 0,
+    LayoutOrder = 1,
+}, window)
+
+New("TextLabel", {
+    BackgroundTransparency = 1,
+    Position = UDim2.fromOffset(16, 6),
+    Size = UDim2.new(1, -70, 0, 20),
+    Text = "EMPYREAN DRAGON",
+    Font = Enum.Font.GothamBold,
+    TextSize = 16,
+    TextColor3 = THEME.text,
+    TextXAlignment = Enum.TextXAlignment.Left,
+}, titleBar)
+
+New("TextLabel", {
+    BackgroundTransparency = 1,
+    Position = UDim2.fromOffset(16, 25),
+    Size = UDim2.new(1, -70, 0, 14),
+    Text = "License verification",
+    Font = Enum.Font.Gotham,
+    TextSize = 11,
+    TextColor3 = THEME.muted,
+    TextXAlignment = Enum.TextXAlignment.Left,
+}, titleBar)
+
+local close = New("TextButton", {
+    Size = UDim2.fromOffset(26, 26),
+    Position = UDim2.new(1, -36, 0, 10),
+    BackgroundColor3 = THEME.red,
+    AutoButtonColor = false,
+    BorderSizePixel = 0,
+    Text = "X",
+    TextColor3 = THEME.text,
+    Font = Enum.Font.GothamBold,
+    TextSize = 13,
+}, titleBar)
+
+Round(close, 7)
+
+local accentLine = New("Frame", {
+    Size = UDim2.new(1, 0, 0, 2),
+    BackgroundColor3 = Color3.new(1, 1, 1),
+    BorderSizePixel = 0,
+    LayoutOrder = 2,
+}, window)
+
 do
-local _0x177D = _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105)):FindFirstChild(string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,65,117,116,111,70,97,114,109))
-if _0x177D then
-_0x177D:Destroy()
+    local g = Instance.new("UIGradient")
+    g.Color = ColorSequence.new(THEME.accent, THEME.accent2)
+    g.Parent = accentLine
 end
-end
-local _0x38D3 = _0x6442(string.char(83,99,114,101,101,110,71,117,105), {
-Name =string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,65,117,116,111,70,97,114,109),
-ResetOnSpawn = false,
-ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-}, _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105)))
-local _0xBB10 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(_0x3152, _0x2114),
-Position = UDim2.new(0.5, -_0x3152 / 2, 0.5, -_0x2114 / 2),
-BackgroundColor3 = _0xF719.bg,
-BorderSizePixel = 0,
-Active = true,
-ClipsDescendants = true,
-}, _0x38D3)
-_0x34AC(_0xBB10, 14)
-_0x4C8B(_0xBB10, _0xF719.border, 1.5)local _0xAB60 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.dot = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(10, 10),
-Position = UDim2.fromOffset(16, 18),
-BackgroundColor3 = _0xF719.muted,
-BorderSizePixel = 0,
-}, _0xAB60)
-_0x34AC(_0xA2C1.dot, 5)
-local _0x01CA = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, -90, 1, 0),
-Position = UDim2.fromOffset(36, 0),
-BackgroundTransparency = 1,
-Text =string.char(69,77,80,89,82,69,65,78,32,68,82,65,71,79,78,32,65,85,84,79,32,70,65,82,77),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 17,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-local _0x5773 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.fromOffset(28, 28),
-Position = UDim2.new(1, -40, 0, 9),
-BackgroundColor3 = _0xF719.red,
-Text =string.char(88),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-}, _0xAB60)
-_0x34AC(_0x5773, 7)
-_0x0041(_0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 2),
-Position = UDim2.fromOffset(0, 46),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-}, _0xBB10), _0xF719.accent, _0xF719.accent2)local _0xCED6 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, 48),
-Size = UDim2.new(1, 0, 0, 38),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.indicator = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1 / 3, -24, 0, 3),
-Position = UDim2.new(0, 12, 1, -3),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-}, _0xCED6)
-_0x34AC(_0xA2C1.indicator, 2)
-_0x0041(_0xA2C1.indicator, _0xF719.accent, _0xF719.accent2)
-for i, name in ipairs({string.char(70,65,82,77),string.char(83,84,65,84,83),string.char(83,69,84,85,80)}) do
-_0xA2C1.tabs[i] = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.new((i - 1) / 3, 0, 0, 0),
-Size = UDim2.new(1 / 3, 0, 1, -3),
-BackgroundTransparency = 1,
-AutoButtonColor = false,
-Text = name,
-Font = Enum.Font.GothamBold,
-TextSize = 13,
-TextColor3 = _0xF719.muted,
-}, _0xCED6)
-_0xA2C1.pages[i] = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, _0xF1C4),
-Size = UDim2.new(1, 0, 0, _0xA377),
-BackgroundTransparency = 1,
-Visible = (i == 1),
-}, _0xBB10)
-end
-local function _0xBAE9(index)
-for i = 1, 3 do
-_0xA2C1.pages[i].Visible = (i == index)
-_0xA2C1.tabs[i].TextColor3 = (i == index) and _0xF719.text or _0xF719.muted
-end
-_0x443A(_0xA2C1.indicator, 0.2, { Position = UDim2.new((index - 1) / 3, 12, 1, -3) })
-end
-for i = 1, 3 do
-_0xA2C1.tabs[i].MouseButton1Click:Connect(function()
-_0xBAE9(i)
+
+local body = New("Frame", {
+    Size = UDim2.new(1, 0, 0, 0),
+    AutomaticSize = Enum.AutomaticSize.Y,
+    BackgroundTransparency = 1,
+    LayoutOrder = 3,
+}, window)
+
+New("UIPadding", {
+    PaddingTop = UDim.new(0, 16),
+    PaddingBottom = UDim.new(0, 16),
+    PaddingLeft = UDim.new(0, 16),
+    PaddingRight = UDim.new(0, 16),
+}, body)
+
+New("UIListLayout", {
+    Padding = UDim.new(0, 10),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, body)
+
+New("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 20),
+    BackgroundTransparency = 1,
+    Text = "Enter your key",
+    Font = Enum.Font.GothamBold,
+    TextSize = 15,
+    TextColor3 = THEME.text,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    LayoutOrder = 1,
+}, body)
+
+New("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 32),
+    BackgroundTransparency = 1,
+    Text = "Each key works on one device only. The first device that uses a key is locked to it.",
+    Font = Enum.Font.Gotham,
+    TextSize = 11,
+    TextColor3 = THEME.muted,
+    TextWrapped = true,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    TextYAlignment = Enum.TextYAlignment.Top,
+    LayoutOrder = 2,
+}, body)
+
+local keyBoxFrame = New("Frame", {
+    Size = UDim2.new(1, 0, 0, 42),
+    BackgroundColor3 = THEME.panel,
+    BorderSizePixel = 0,
+    LayoutOrder = 3,
+}, body)
+
+Round(keyBoxFrame, 9)
+local keyStroke = Stroke(keyBoxFrame, THEME.border, 1)
+
+local keyBox = New("TextBox", {
+    Size = UDim2.new(1, -24, 1, 0),
+    Position = UDim2.fromOffset(12, 0),
+    BackgroundTransparency = 1,
+    Text = "",
+    PlaceholderText = "XXXX-XXXX-XXXX-XXXX",
+    PlaceholderColor3 = THEME.muted,
+    TextColor3 = THEME.text,
+    Font = Enum.Font.GothamMedium,
+    TextSize = 14,
+    ClearTextOnFocus = false,
+    TextXAlignment = Enum.TextXAlignment.Left,
+}, keyBoxFrame)
+
+keyBox.Focused:Connect(function()
+    Tween(keyStroke, 0.15, { Color = THEME.accent })
 end)
-end
-_0xBAE9(1)local _0xF3BC = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, _0x2114 - 36),
-Size = UDim2.new(1, 0, 0, 36),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.footer = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 0),
-Size = UDim2.new(1, -32, 1, 0),
-Text =string.char(82,101,97,100,121),
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0xF3BC)local function _0xDA08(parent, y, _0x832E)
-local _0x61F3 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(12, y),
-Size = UDim2.new(1, -24, 0, 38),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-}, parent)
-_0x34AC(_0x61F3, 9)
-_0x4C8B(_0x61F3, _0xF719.border, 1)
-return _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 0),
-Size = UDim2.new(1, -28, 1, 0),
-Text ="",
-Font = Enum.Font.GothamMedium,
-TextSize = 13,
-TextColor3 = _0x832E,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0x61F3)
-endlocal function _0x240D(parent, col, y, caption, _0x832E)
-local _0xB74F = (_0x3152 - 24 - 16) / 3
-local _0xF1F3 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(12 + col * (_0xB74F + 8), y),
-Size = UDim2.fromOffset(_0xB74F, 76),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-}, parent)
-_0x34AC(_0xF1F3, 10)
-_0x4C8B(_0xF1F3, _0xF719.border, 1)
-_0x34AC(_0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, -24, 0, 2),
-Position = UDim2.fromOffset(12, 0),
-BackgroundColor3 = _0x832E,
-BorderSizePixel = 0,
-}, _0xF1F3), 1)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 14),
-Text = caption,
-Font = Enum.Font.GothamMedium,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xF1F3)
-return _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(12, 28),
-Size = UDim2.new(1, -24, 0, 38),
-Text =string.char(48),
-Font = Enum.Font.GothamBold,
-TextSize = 22,
-TextColor3 = _0x832E,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0xF1F3)
-endlocal _0xC2A6 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 48),
-BackgroundColor3 = _0xF719.green,
-AutoButtonColor = false,
-Text =string.char(83,84,65,82,84,32,70,65,82,77),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 16,
-}, _0xA2C1.pages[1])
-_0x34AC(_0xC2A6, 10)
-local _0x9EA8 = _0xDA08(_0xA2C1.pages[1], 68, _0xF719.text)
-_0x9EA8.Text =string.char(83,116,97,116,117,115,58,32,83,116,111,112,112,101,100)local _0xCFC4 = _0xDA08(_0xA2C1.pages[1], 112, _0xF719.blue)
-_0xCFC4.Text =string.char(80,101,116,115,58,32,78,111,110,101)local _0x2FFE = _0xDA08(_0xA2C1.pages[1], 156, _0xF719.yellow)
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,87,97,105,116,105,110,103)_0xA2C1.t.miniPresents = _0x240D(_0xA2C1.pages[1], 0, 206,string.char(80,82,69,83,69,78,84,83,32,68,69,83,84,82,79,89,69,68), _0xF719.green)
-_0xA2C1.t.miniCycles = _0x240D(_0xA2C1.pages[1], 1, 206,string.char(67,89,67,76,69,83), _0xF719.accent)
-_0xA2C1.t.miniDph = _0x240D(_0xA2C1.pages[1], 2, 206,string.char(68,73,65,77,79,78,68,83,32,47,32,72,79,85,82), _0xF719.blue)_0xA2C1.t.presents = _0x240D(_0xA2C1.pages[2], 0, 10,string.char(80,82,69,83,69,78,84,83,32,68,69,83,84,82,79,89,69,68), _0xF719.green)
-_0xA2C1.t.cycles = _0x240D(_0xA2C1.pages[2], 1, 10,string.char(67,89,67,76,69,83), _0xF719.accent)
-_0xA2C1.t.uptime = _0x240D(_0xA2C1.pages[2], 2, 10,string.char(70,65,82,77,32,84,73,77,69), _0xF719.text)
-_0xA2C1.t.diamonds = _0x240D(_0xA2C1.pages[2], 0, 94,string.char(68,73,65,77,79,78,68,83,32,69,65,82,78,69,68), _0xF719.blue)
-_0xA2C1.t.dph = _0x240D(_0xA2C1.pages[2], 1, 94,string.char(68,73,65,77,79,78,68,83,32,47,32,72,79,85,82), _0xF719.blue)
-_0xA2C1.t.dpc = _0x240D(_0xA2C1.pages[2], 2, 94,string.char(68,73,65,77,79,78,68,83,32,47,32,67,89,67,76,69), _0xF719.blue)
-_0xA2C1.t.potions = _0x240D(_0xA2C1.pages[2], 0, 178,string.char(80,79,84,73,79,78,83,32,71,65,73,78,69,68), _0xF719.accent2)
-_0xA2C1.t.ptph = _0x240D(_0xA2C1.pages[2], 1, 178,string.char(80,79,84,73,79,78,83,32,47,32,72,79,85,82), _0xF719.accent2)
-_0xA2C1.t.pph = _0x240D(_0xA2C1.pages[2], 2, 178,string.char(80,82,69,83,69,78,84,83,32,47,32,72,79,85,82), _0xF719.green)
-_0xA2C1.resetBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 262),
-Size = UDim2.new(1, -24, 0, 38),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(82,69,83,69,84,32,83,84,65,84,83),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[2])
-_0x34AC(_0xA2C1.resetBtn, 9)
-_0x4C8B(_0xA2C1.resetBtn, _0xF719.border, 1)local _0xBC37 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 40),
-BackgroundColor3 = Color3.fromRGB(60, 90, 150),
-AutoButtonColor = false,
-Text =string.char(67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xBC37, 9)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 100),
-Size = UDim2.new(1, -28, 0, 40),
-Text =string.char(80,114,101,115,115,32,67,65,76,73,66,82,65,84,69,44,32,116,104,101,110,32,69,81,85,73,80,32,116,104,101,32,100,114,97,103,111,110,32,98,121,32,104,97,110,100,32,97,110,100,32,85,78,69,81,85,73,80,32,105,116,32,98,121,32,104,97,110,100,32,40,107,101,101,112,32,97,32,115,108,111,116,32,102,114,101,101,41,46,32,67,104,101,99,107,32,119,105,116,104,32,84,69,83,84,44,32,116,104,101,110,32,83,84,65,82,84,46,32,83,87,65,80,32,102,108,105,112,115,32,101,113,117,105,112,47,117,110,101,113,117,105,112,32,105,102,32,84,69,83,84,32,115,104,111,119,115,32,116,104,101,32,111,112,112,111,115,105,116,101,46,32,79,114,32,116,121,112,101,32,116,104,101,32,105,110,100,101,120,101,115,32,97,98,111,118,101,32,43,32,65,80,80,76,89,46),
-Font = Enum.Font.Gotham,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-}, _0xA2C1.pages[3])
-_0xA2C1.printKeysBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 150),
-Size = UDim2.new(1, -24, 0, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(80,82,73,78,84,32,83,65,86,69,32,75,69,89,83,32,40,79,117,116,112,117,116,41,32,45,32,104,101,108,112,115,32,102,105,110,100,32,100,105,97,109,111,110,100,115,32,47,32,112,111,116,105,111,110,115),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.printKeysBtn, 9)
-_0x4C8B(_0xA2C1.printKeysBtn, _0xF719.border, 1)
-_0xA2C1.trackInfo = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 194),
-Size = UDim2.new(1, -28, 0, 40),
-Text =string.char(68,105,97,109,111,110,100,115,58,32,110,111,116,32,114,101,97,100,32,121,101,116,32,32,32,124,32,32,32,80,111,116,105,111,110,115,58,32,110,111,116,32,114,101,97,100,32,121,101,116),
-Font = Enum.Font.Gotham,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-}, _0xA2C1.pages[3])
-local _0xB108 = (_0x3152 - 24 - 8) / 2
-_0xA2C1.testBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 240),
-Size = UDim2.fromOffset(_0xB108, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(84,69,83,84,32,40,101,113,117,105,112,32,43,32,117,110,101,113,117,105,112,32,100,114,97,103,111,110,41),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.testBtn, 9)
-_0x4C8B(_0xA2C1.testBtn, _0xF719.border, 1)
-_0xA2C1.swapBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12 + _0xB108 + 8, 240),
-Size = UDim2.fromOffset(_0xB108, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(83,87,65,80,32,101,113,117,105,112,32,60,45,62,32,117,110,101,113,117,105,112),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.swapBtn, 9)
-_0x4C8B(_0xA2C1.swapBtn, _0xF719.border, 1)
-local function _0x0AF0(_0x6FFB)
-_0x9EA8.Text =string.char(83,116,97,116,117,115,58,32).. _0x6FFB
-_0xA2C1.footer.Text = _0x6FFB
-local _0x7F87 = string.lower(_0x6FFB)
-local _0x832E = _0xF719.muted
-if string.find(_0x7F87,string.char(101,114,114,111,114), 1, true)
-or string.find(_0x7F87,string.char(102,97,105,108), 1, true)
-or string.find(_0x7F87,string.char(109,105,115,115,105,110,103), 1, true)
-or string.find(_0x7F87,string.char(110,111,116,32,97,32), 1, true) then
-_0x832E = Color3.fromRGB(235, 87, 87)
-elseif string.find(_0x7F87,string.char(99,97,108,105,98,114,97,116,105,110,103), 1, true)
-or string.find(_0x7F87,string.char(101,113,117,105,112,32,102,111,117,110,100), 1, true)
-or string.find(_0x7F87,string.char(114,101,45,115,101,108,101,99,116), 1, true)
-or string.find(_0x7F87,string.char(115,107,105,112,112,101,100), 1, true)
-or string.find(_0x7F87,string.char(110,111,116,104,105,110,103,32,100,101,116,101,99,116,101,100), 1, true) then
-_0x832E = _0xF719.yellow
-elseif string.find(_0x7F87,string.char(100,101,115,116,114,111,121,101,100), 1, true)
-or string.find(_0x7F87,string.char(114,101,97,100,121), 1, true)
-or string.find(_0x7F87,string.char(99,97,108,105,98,114,97,116,101,100), 1, true)
-or string.find(_0x7F87,string.char(97,112,112,108,105,101,100), 1, true) then
-_0x832E = Color3.fromRGB(46, 204, 113)
-end
-_0xA2C1.footer.TextColor3 = _0x832E
-if _0x452C then
-print(string.char(91,65,85,84,79,32,70,65,82,77,93,32).. _0x6FFB)
-end
-end
-local function _0xE18C(_0x6FFB)
-_0xCFC4.Text =string.char(80,101,116,115,58,32).. _0x6FFB
-if _0x452C then print(string.char(91,65,85,84,79,32,70,65,82,77,32,80,69,84,83,93,32).. _0x6FFB) end
-end
-local function _0x1F4D(...)
-if _0x452C then
-print(string.char(91,65,85,84,79,32,70,65,82,77,32,68,69,66,85,71,93), ...)
-end
-endlocal _0x5FB2 = { [_0xDB8D] = true }
-for _, _0x5966 in ipairs(_0xE3AC) do
-_0x5FB2[_0x5966] = true
-end
-local _0x294D = 0local _0xBB6C = 0
-local _0xF2E5
-local _0xD8BC
-local _0x0483 = false
-local _0x7FAF
-local _0x85EB = false
-local function _0x31ED(remote)
-return tostring(table.find(_0xB9C7:GetChildren(), remote))
-end
-local function _0xFE92(remote, uid)
-if _0x294D == 0 or not _0x5FB2[uid] then return end
-if _0x294D == 1 then
-_0x151D = remote
-_0x294D = 2
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,69,81,85,73,80,32,114,101,109,111,116,101,32,105,110,100,101,120,61).. _0x31ED(remote))
-_0x0AF0(string.char(69,113,117,105,112,32,102,111,117,110,100,32,45,32,110,111,119,32,85,78,69,81,85,73,80,32,116,104,97,116,32,112,101,116,32,98,121,32,104,97,110,100))
-elseif remote ~= _0x151D then
-_0xE941 = remote
-_0x294D = 0
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,85,78,69,81,85,73,80,32,114,101,109,111,116,101,32,105,110,100,101,120,61).. _0x31ED(remote))
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,68,79,78,69,32,45,32,101,113,117,105,112,61).. _0x31ED(_0x151D) ..string.char(32,117,110,101,113,117,105,112,61).. _0x31ED(_0xE941)
-..string.char(32,40,111,112,116,105,111,110,97,108,58,32,112,117,116,32,116,104,101,109,32,105,110,32,70,65,76,76,66,65,67,75,95,69,81,85,73,80,95,73,78,68,69,88,32,47,32,70,65,76,76,66,65,67,75,95,85,78,69,81,85,73,80,95,73,78,68,69,88,41))
-_0x0AF0(string.char(67,97,108,105,98,114,97,116,101,100,32,45,32,112,114,101,115,115,32,84,69,83,84,44,32,116,104,101,110,32,83,84,65,82,84))
-end
-end
-local function _0x73D2()
-if _0x0483 then return true end
-if not (hookmetamethod and getnamecallmethod) then return false end
-local _0x8377 = newcclosure or function(_0xF1F3) return _0xF1F3 end
-local _0x57FC = pcall(function()
-_0x7FAF = hookmetamethod(game,string.char(95,95,110,97,109,101,99,97,108,108), _0x8377(function(self, ...)
-if _0x294D == 0 then
-return _0x7FAF(self, ...)
-end
-local _0x3C68 = getnamecallmethod()
-if _0x3C68 ==string.char(73,110,118,111,107,101,83,101,114,118,101,114)and typeof(self) ==string.char(73,110,115,116,97,110,99,101)and self.ClassName ==string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)then
-local _0x09E5 = ...
-if type(_0x09E5) ==string.char(115,116,114,105,110,103)and _0x5FB2[_0x09E5] then
-task.defer(_0xFE92, self, _0x09E5)
-end
-end
-if setnamecallmethod then
-setnamecallmethod(_0x3C68)
-end
-return _0x7FAF(self, ...)
-end))
+
+keyBox.FocusLost:Connect(function()
+    Tween(keyStroke, 0.15, { Color = THEME.border })
 end)
-_0x0483 = _0x57FC
-return _0x57FC
-end
-local function _0x92D1()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,98,101,102,111,114,101,32,99,97,108,105,98,114,97,116,105,110,103))
-return
-end
-if not _0x73D2() then
-_0x0AF0(string.char(72,111,111,107,32,110,111,116,32,115,117,112,112,111,114,116,101,100,32,45,32,117,115,101,32,116,104,101,32,35,32,98,111,120,101,115))
-return
-end
-_0xF2E5 = _0x151D
-_0xD8BC = _0xE941
-_0x151D = nil
-_0xE941 = nil
-_0x294D = 1
-_0xBB6C = _0xBB6C + 1
-local _0x5D12 = _0xBB6C
-_0x0AF0(string.char(67,97,108,105,98,114,97,116,105,110,103,32,45,32,69,81,85,73,80,32,116,104,101,32,100,114,97,103,111,110,32,98,121,32,104,97,110,100,44,32,116,104,101,110,32,85,78,69,81,85,73,80,32,105,116))
-task.delay(60, function()
-if _0xBB6C == _0x5D12 and _0x294D ~= 0 then
-_0x294D = 0
-_0x151D = _0xF2E5
-_0xE941 = _0xD8BC
-_0x0AF0(string.char(78,111,116,104,105,110,103,32,100,101,116,101,99,116,101,100,32,45,32,111,108,100,32,114,101,109,111,116,101,115,32,107,101,112,116,32,40,101,113,117,105,112,32,97,110,100,32,117,110,101,113,117,105,112,32,110,101,101,100,32,100,105,102,102,101,114,101,110,116,32,114,101,109,111,116,101,115,41))
-end
+
+local activate = New("TextButton", {
+    Size = UDim2.new(1, 0, 0, 44),
+    BackgroundColor3 = THEME.accent,
+    AutoButtonColor = false,
+    BorderSizePixel = 0,
+    Text = "ACTIVATE",
+    TextColor3 = THEME.text,
+    Font = Enum.Font.GothamBold,
+    TextSize = 14,
+    LayoutOrder = 4,
+}, body)
+
+Round(activate, 9)
+
+activate.MouseEnter:Connect(function()
+    Tween(activate, 0.12, { BackgroundColor3 = THEME.accent:Lerp(Color3.new(1, 1, 1), 0.12) })
 end)
-end
-_0xBC37.MouseButton1Click:Connect(function()
-local _0x57FC, _0x39BE = pcall(_0x92D1)
-if not _0x57FC then
-_0x294D = 0
-_0x151D = _0xF2E5
-_0xE941 = _0xD8BC
-warn(string.char(91,67,65,76,73,66,82,65,84,69,32,69,82,82,79,82,93), _0x39BE)
-_0x0AF0(string.char(69,82,82,79,82,32,105,110,32,99,97,108,105,98,114,97,116,101,58,32).. tostring(_0x39BE))
-end
-end)_0xA2C1.testBtn.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-if _0x294D ~= 0 then
-_0x0AF0(string.char(70,105,110,105,115,104,32,99,97,108,105,98,114,97,116,105,111,110,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-if _0x85EB then return end
-_0x85EB = true
-task.spawn(function()
-_0x0AF0(string.char(84,101,115,116,58,32,101,113,117,105,112,112,105,110,103,32,116,104,101,32,100,114,97,103,111,110,46,46,46))
-local _0x66AB, _0x8149 = pcall(function()
-return _0x151D:InvokeServer(_0xDB8D)
+
+activate.MouseLeave:Connect(function()
+    Tween(activate, 0.12, { BackgroundColor3 = THEME.accent })
 end)
-print(string.char(91,84,69,83,84,93,32,101,113,117,105,112,32,45,62), _0x66AB, _0x8149)
-task.wait(3)
-_0x0AF0(string.char(84,101,115,116,58,32,117,110,101,113,117,105,112,112,105,110,103,32,116,104,101,32,100,114,97,103,111,110,46,46,46))
-local _0x4CD8, _0x9597 = pcall(function()
-return _0xE941:InvokeServer(_0xDB8D)
+
+local statusLabel = New("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 16),
+    BackgroundTransparency = 1,
+    Text = "",
+    Font = Enum.Font.GothamMedium,
+    TextSize = 12,
+    TextColor3 = THEME.muted,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    TextTruncate = Enum.TextTruncate.AtEnd,
+    LayoutOrder = 5,
+}, body)
+
+local hwidShort = HWID and (string.sub(HWID, 1, 8) .. "...") or "unavailable"
+
+New("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 14),
+    BackgroundTransparency = 1,
+    Text = "Device ID: " .. hwidShort .. "  (used to lock your key)",
+    Font = Enum.Font.Gotham,
+    TextSize = 10,
+    TextColor3 = THEME.muted,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    LayoutOrder = 6,
+}, body)
+
+local function SetStatus(text, color)
+    statusLabel.Text = text
+    statusLabel.TextColor3 = color or THEME.muted
+end
+
+local function Shake(inst)
+    local base = inst.Position
+
+    for _, dx in ipairs({ -6, 6, -4, 4, 0 }) do
+        Tween(inst, 0.04, { Position = base + UDim2.fromOffset(dx, 0) })
+        task.wait(0.045)
+    end
+end
+
+-- DRAG
+
+local dragging = false
+local dragStart
+local startPosition
+
+local function IsPointer(input)
+    return input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch
+end
+
+titleBar.InputBegan:Connect(function(input)
+    if IsPointer(input) then
+        dragging = true
+        dragStart = input.Position
+        startPosition = window.Position
+    end
 end)
-print(string.char(91,84,69,83,84,93,32,117,110,101,113,117,105,112,32,45,62), _0x4CD8, _0x9597)
-task.wait(1)
-if _0x66AB and _0x4CD8 then
-_0x0AF0(string.char(84,101,115,116,32,100,111,110,101,32,45,32,100,114,97,103,111,110,32,115,104,111,117,108,100,32,104,97,118,101,32,97,112,112,101,97,114,101,100,32,116,104,101,110,32,118,97,110,105,115,104,101,100,59,32,105,102,32,110,111,116,44,32,112,114,101,115,115,32,83,87,65,80))
-else
-_0x0AF0(string.char(84,101,115,116,32,101,114,114,111,114,32,45,32,115,101,101,32,79,117,116,112,117,116,32,40,70,57,41,59,32,116,114,121,32,83,87,65,80,32,111,114,32,67,65,76,73,66,82,65,84,69,32,97,103,97,105,110))
-end
-_0x85EB = false
+
+UIS.InputChanged:Connect(function(input)
+    if dragging
+        and (input.UserInputType == Enum.UserInputType.MouseMovement
+            or input.UserInputType == Enum.UserInputType.Touch) then
+
+        local delta = input.Position - dragStart
+
+        window.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
 end)
-end)_0xA2C1.swapBtn.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-_0x151D, _0xE941 = _0xE941, _0x151D
-print(string.char(91,83,87,65,80,93,32,101,113,117,105,112,32,105,110,100,101,120,61).. _0x31ED(_0x151D) ..string.char(32,117,110,101,113,117,105,112,32,105,110,100,101,120,61).. _0x31ED(_0xE941))
-_0x0AF0(string.char(83,119,97,112,112,101,100,32,45,32,114,117,110,32,84,69,83,84,32,97,103,97,105,110))
-end)local function _0xB420(placeholder, x)
-local _0xF1F3 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(150, 34),
-Position = UDim2.fromOffset(x, 60),
-BackgroundColor3 = Color3.fromRGB(30, 34, 46),
-BorderSizePixel = 0,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xF1F3, 7)
-return _0x6442(string.char(84,101,120,116,66,111,120), {
-Size = UDim2.new(1, -10, 1, 0),
-Position = UDim2.fromOffset(5, 0),
-BackgroundTransparency = 1,
-Text ="",
-PlaceholderText = placeholder,
-PlaceholderColor3 = Color3.fromRGB(130, 138, 160),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-ClearTextOnFocus = false,
-}, _0xF1F3)
-end
-local _0xA3E8 = _0xB420(string.char(69,113,117,105,112,32,35), 12)
-local _0x0E56 = _0xB420(string.char(85,110,101,113,117,105,112,32,35), 170)
-local _0x9807 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.new(1, -340, 0, 34),
-Position = UDim2.fromOffset(328, 60),
-BackgroundColor3 = Color3.fromRGB(35, 155, 90),
-Text =string.char(65,80,80,76,89),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0x9807, 7)
-_0x9807.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-local _0xE17D = tonumber(_0xA3E8.Text)
-local _0xE401 = tonumber(_0x0E56.Text)
-if not _0xE17D or not _0xE401 then
-_0x0AF0(string.char(84,121,112,101,32,98,111,116,104,32,105,110,100,101,120,32,110,117,109,98,101,114,115))
-return
-end
-local _0xD8E2 = _0xB9C7:GetChildren()
-local _0xC61A = _0xD8E2[_0xE17D]
-local _0x8899 = _0xD8E2[_0xE401]
-if not (_0xC61A and _0xC61A:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110))) then
-_0x0AF0(string.char(35).. _0xE17D ..string.char(32,105,115,32,110,111,116,32,97,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110))
-return
-end
-if not (_0x8899 and _0x8899:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110))) then
-_0x0AF0(string.char(35).. _0xE401 ..string.char(32,105,115,32,110,111,116,32,97,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110))
-return
-end
-_0x151D = _0xC61A
-_0xE941 = _0x8899
-_0x294D = 0
-_0xBB6C = _0xBB6C + 1
-_0x0AF0(string.char(73,110,100,101,120,101,115,32,97,112,112,108,105,101,100,32,45,32,112,114,101,115,115,32,83,84,65,82,84))
-end)local _0xB4BD = false
-local _0xB773
-local _0xEB13
-_0x01CA.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-_0xB4BD = true
-_0xB773 = input.Position
-_0xEB13 = _0xBB10.Position
-end
+
+UIS.InputEnded:Connect(function(input)
+    if IsPointer(input) then
+        dragging = false
+    end
 end)
-_0x2699.InputChanged:Connect(function(input)
-if _0xB4BD
-and (input.UserInputType == Enum.UserInputType.MouseMovement
-or input.UserInputType == Enum.UserInputType.Touch) then
-local _0xB441 = input.Position - _0xB773
-_0xBB10.Position = UDim2.new(
-_0xEB13.X.Scale,
-_0xEB13.X.Offset + _0xB441.X,
-_0xEB13.Y.Scale,
-_0xEB13.Y.Offset + _0xB441.Y
-)
+
+-- KEY CHECK (offline)
+
+local function LoadBindings()
+    local data = {}
+
+    pcall(function()
+        if isfile and readfile and isfile(BIND_FILE) then
+            local decoded = HttpService:JSONDecode(readfile(BIND_FILE))
+
+            if type(decoded) == "table" then
+                data = decoded
+            end
+        end
+    end)
+
+    return data
 end
+
+local function SaveBindings(data)
+    pcall(function()
+        if writefile then
+            writefile(BIND_FILE, HttpService:JSONEncode(data))
+        end
+    end)
+end
+
+local function CheckKey(key)
+    if not VALID_KEYS[key] then
+        return false, "Invalid key"
+    end
+
+    if not HWID then
+        return false, "Could not read your device ID"
+    end
+
+    local bindings = LoadBindings()
+    local bound = bindings[key]
+
+    if bound and bound ~= HWID then
+        return false, "This key is locked to another device"
+    end
+
+    if not bound then
+        bindings[key] = HWID
+        SaveBindings(bindings)
+    end
+
+    return true
+end
+
+local busy = false
+
+local function TryActivate()
+    if busy then return end
+
+    -- gsub returns 2 values, so keep only the string
+    local cleaned = (keyBox.Text or ""):gsub("%s+", "")
+    local key = string.lower(cleaned)
+
+    if #key < 8 then
+        SetStatus("Enter a valid key", THEME.red)
+        Shake(keyBoxFrame)
+        return
+    end
+
+    busy = true
+    activate.Text = "CHECKING..."
+    SetStatus("Checking key...", THEME.muted)
+
+    local ok, result = CheckKey(key)
+
+    if not ok then
+        busy = false
+        activate.Text = "ACTIVATE"
+        SetStatus(result, THEME.red)
+        Shake(keyBoxFrame)
+        return
+    end
+
+    pcall(function()
+        if writefile then
+            writefile(KEY_FILE, key)
+        end
+    end)
+
+    activate.Text = "UNLOCKED"
+    Tween(activate, 0.2, { BackgroundColor3 = THEME.green })
+    SetStatus("Key accepted - loading menu...", THEME.green)
+
+    task.wait(0.7)
+    gui:Destroy()
+
+    task.spawn(function()
+        local okRun, runErr = pcall(StartMenu)
+
+        if not okRun then
+            warn("[LOADER] script error:", runErr)
+        end
+    end)
+end
+
+activate.MouseButton1Click:Connect(TryActivate)
+
+keyBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        TryActivate()
+    end
 end)
-_0x2699.InputEnded:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-_0xB4BD = false
-end
-end)local _0x1DC1 = {
-_0x9713 = 0,
-cycles = 0,
-diamonds = 0,
-potions = 0,
-seconds = 0,hasDiamonds = nil,hasPotions = nil,
-lastDiamonds = nil,
-lastPotions = nil,
-potionsKey = nil,
-}
-local function _0x3AFD(_0xC81D)
-if _0xC81D >= 1e9 then
-return string.format(string.char(37,46,50,102,66), _0xC81D / 1e9)
-elseif _0xC81D >= 1e6 then
-return string.format(string.char(37,46,50,102,77), _0xC81D / 1e6)
-elseif _0xC81D >= 1e3 then
-return string.format(string.char(37,46,49,102,75), _0xC81D / 1e3)
-elseif _0xC81D == math.floor(_0xC81D) then
-return string.format(string.char(37,100), _0xC81D)
-end
-return string.format(string.char(37,46,49,102), _0xC81D)
-end
-local function _0xFEEA(sec)
-sec = math.floor(sec)
-return string.format(string.char(37,48,50,100,58,37,48,50,100,58,37,48,50,100), sec // 3600, (sec % 3600) // 60, sec % 60)
-end
-local function _0x2657(label, text)
-if label.Text ~= text then
-label.Text = text
-end
-end
-local function _0x0D1E(amount, available, decimals)
-if available == false then returnstring.char(78,47,65)end
-if _0x1DC1.seconds < 15 then returnstring.char(46,46,46)end
-local _0x30CA = amount / (_0x1DC1.seconds / 3600)
-if decimals then
-return string.format(string.char(37,46).. decimals ..string.char(102), _0x30CA)
-end
-return _0x3AFD(_0x30CA)
-end
-local function _0x51DA()
-local _0x5EC9 = _0xA2C1.t
-local _0x827F = (_0x1DC1.hasDiamonds == false) andstring.char(78,47,65)or _0x3AFD(_0x1DC1.diamonds)
-local _0x0823 = (_0x1DC1.hasPotions == false) andstring.char(78,47,65)or _0x3AFD(_0x1DC1.potions)
-local _0x2988 = _0x0D1E(_0x1DC1.diamonds, _0x1DC1.hasDiamonds)
-local _0x8B11 =string.char(45)if _0x1DC1.hasDiamonds == false then
-_0x8B11 =string.char(78,47,65)elseif _0x1DC1.cycles > 0 then
-_0x8B11 = _0x3AFD(_0x1DC1.diamonds / _0x1DC1.cycles)
-end
-_0x2657(_0x5EC9.presents, tostring(_0x1DC1.presents))
-_0x2657(_0x5EC9.cycles, tostring(_0x1DC1.cycles))
-_0x2657(_0x5EC9.uptime, _0xFEEA(_0x1DC1.seconds))
-_0x2657(_0x5EC9.diamonds, _0x827F)
-_0x2657(_0x5EC9.dph, _0x2988)
-_0x2657(_0x5EC9.dpc, _0x8B11)
-_0x2657(_0x5EC9.potions, _0x0823)
-_0x2657(_0x5EC9.ptph, _0x0D1E(_0x1DC1.potions, _0x1DC1.hasPotions))
-_0x2657(_0x5EC9.pph, _0x0D1E(_0x1DC1.presents, true, 1))
-_0x2657(_0x5EC9.miniPresents, tostring(_0x1DC1.presents))
-_0x2657(_0x5EC9.miniCycles, tostring(_0x1DC1.cycles))
-_0x2657(_0x5EC9.miniDph, _0x2988)
-local _0x69BC = (_0x1DC1.hasDiamonds == nil) andstring.char(110,111,116,32,114,101,97,100,32,121,101,116)or (_0x1DC1.hasDiamonds andstring.char(102,111,117,110,100)orstring.char(78,79,84,32,70,79,85,78,68))
-local _0xFED4 = (_0x1DC1.hasPotions == nil) andstring.char(110,111,116,32,114,101,97,100,32,121,101,116)or (_0x1DC1.hasPotions and (string.char(102,111,117,110,100,32,40).. tostring(_0x1DC1.potionsKey or _0x7BAD) ..string.char(41)) orstring.char(78,79,84,32,70,79,85,78,68))
-_0x2657(_0xA2C1.trackInfo,string.char(68,105,97,109,111,110,100,115,58,32).. _0x69BC ..string.char(32,32,32,124,32,32,32,80,111,116,105,111,110,115,58,32).. _0xFED4)
-endlocal function _0x42FB()
-local _0x57FC, _0x05CB = pcall(function()
-return _0x7702.Save.Get()
+
+close.MouseButton1Click:Connect(function()
+    gui:Destroy()
 end)
-if _0x57FC and type(_0x05CB) ==string.char(116,97,98,108,101)then
-return _0x05CB
-end
-return nil
-end
-local function _0x9072(v)
-if type(v) ==string.char(110,117,109,98,101,114)then
-return v
-end
-if type(v) ~=string.char(116,97,98,108,101)then
-return nil
-end
-local _0x5FFD = 0
-for _, item in pairs(v) do
-if type(item) ==string.char(110,117,109,98,101,114)then
-_0x5FFD = _0x5FFD + item
-elseif type(item) ==string.char(116,97,98,108,101)then
-_0x5FFD = _0x5FFD + (tonumber(item._am) or tonumber(item.Amount) or tonumber(item.amount) or tonumber(item.Count) or 1)
-else
-_0x5FFD = _0x5FFD + 1
-end
-end
-return _0x5FFD
-end
-local function _0x7E49(_0x05CB)
-if _0x05CB and type(_0x05CB[_0x80D2]) ==string.char(110,117,109,98,101,114)then
-return _0x05CB[_0x80D2]
-endlocal _0x57FC, _0x6FFB = pcall(function()
-local _0xACBB = _0x9C17:FindFirstChild(string.char(108,101,97,100,101,114,115,116,97,116,115))
-if not _0xACBB then return nil end
-for _, child in ipairs(_0xACBB:GetChildren()) do
-if string.find(string.lower(child.Name),string.char(100,105,97,109,111,110,100), 1, true)
-and type(child.Value) ==string.char(110,117,109,98,101,114)then
-return child.Value
-end
-end
-return nil
-end)
-if _0x57FC then
-return _0x6FFB
-end
-return nil
-end
-local function _0xAEC6(_0x05CB)
-if not _0x05CB then return nil end
-local _0x7081 = _0x7BAD or _0x1DC1.potionsKey
-if not _0x7081 then
-for k, v in pairs(_0x05CB) do
-if type(k) ==string.char(115,116,114,105,110,103)and string.find(string.lower(k),string.char(112,111,116,105,111,110), 1, true)
-and (type(v) ==string.char(116,97,98,108,101)or type(v) ==string.char(110,117,109,98,101,114)) then
-_0x7081 = k
-_0x1DC1.potionsKey = k
-break
-end
-end
-end
-if _0x7081 then
-return _0x9072(_0x05CB[_0x7081])
-end
-return nil
-endlocal function _0x041C(_0xD6CF)
-if not _0x1DBD then
-_0x1DC1.lastDiamonds = nil
-_0x1DC1.lastPotions = nil
-return
-end
-_0x1DC1.seconds = _0x1DC1.seconds + _0xD6CF
-local _0x05CB = _0x42FB()
-local _0x42EE = _0x7E49(_0x05CB)
-_0x1DC1.hasDiamonds = (_0x42EE ~= nil)
-if _0x42EE then
-if _0x1DC1.lastDiamonds and _0x42EE > _0x1DC1.lastDiamonds then
-_0x1DC1.diamonds = _0x1DC1.diamonds + (_0x42EE - _0x1DC1.lastDiamonds)
-end
-_0x1DC1.lastDiamonds = _0x42EE
-end
-local _0x88C6 = _0xAEC6(_0x05CB)
-_0x1DC1.hasPotions = (_0x88C6 ~= nil)
-if _0x88C6 then
-if _0x1DC1.lastPotions and _0x88C6 > _0x1DC1.lastPotions then
-_0x1DC1.potions = _0x1DC1.potions + (_0x88C6 - _0x1DC1.lastPotions)
-end
-_0x1DC1.lastPotions = _0x88C6
-end
-end
-local function _0x8D11(label, size)
-label.TextSize = size + 6
-_0x443A(label, 0.3, { TextSize = size })
-end
-local function _0xC65D()
-_0x1DC1.presents = _0x1DC1.presents + 1
-_0x51DA()
-_0x8D11(_0xA2C1.t.presents, 22)
-_0x8D11(_0xA2C1.t.miniPresents, 22)
-end
-local function _0xAB6B()
-_0x1DC1.cycles = _0x1DC1.cycles + 1
-_0x51DA()
-_0x8D11(_0xA2C1.t.cycles, 22)
-_0x8D11(_0xA2C1.t.miniCycles, 22)
-end
-_0xA2C1.resetBtn.MouseButton1Click:Connect(function()
-_0x1DC1.presents = 0
-_0x1DC1.cycles = 0
-_0x1DC1.diamonds = 0
-_0x1DC1.potions = 0
-_0x1DC1.seconds = 0
-_0x1DC1.lastDiamonds = nil
-_0x1DC1.lastPotions = nil
-_0x51DA()
-_0x0AF0(string.char(83,116,97,116,115,32,114,101,115,101,116))
-end)
-_0xA2C1.printKeysBtn.MouseButton1Click:Connect(function()
-local _0x05CB = _0x42FB()
-if not _0x05CB then
-_0x0AF0(string.char(83,97,118,101,32,100,97,116,97,32,110,111,116,32,97,118,97,105,108,97,98,108,101,32,40,76,105,98,114,97,114,121,46,83,97,118,101,46,71,101,116,41))
-return
-end
-print(string.char(91,83,84,65,84,83,93,32,45,45,45,45,32,116,111,112,45,108,101,118,101,108,32,107,101,121,115,32,111,102,32,121,111,117,114,32,115,97,118,101,32,45,45,45,45))
-for k, v in pairs(_0x05CB) do
-local _0x488A = type(v)
-if type(v) ==string.char(116,97,98,108,101)then
-local _0xC81D = 0
-for _ in pairs(v) do
-_0xC81D = _0xC81D + 1
-end
-_0x488A =string.char(116,97,98,108,101,32,40).. _0xC81D ..string.char(32,101,110,116,114,105,101,115,41)elseif type(v) ==string.char(110,117,109,98,101,114)then
-_0x488A =string.char(110,117,109,98,101,114,32,61,32).. tostring(v)
-end
-print(string.char(91,83,84,65,84,83,93), tostring(k), _0x488A)
-end
-for _, k in ipairs({string.char(66,111,111,115,116,115,73,110,118,101,110,116,111,114,121),string.char(66,111,111,115,116,115)}) do
-print(string.char(91,83,84,65,84,83,93,32,45,45,45,45,32).. k ..string.char(32,45,45,45,45))
-if type(_0x05CB[k]) ==string.char(116,97,98,108,101)then
-for a, b in pairs(_0x05CB[k]) do
-local _0x0EFE = tostring(b)
-if type(b) ==string.char(116,97,98,108,101)then
-local _0x8C0A = {}
-for kk, vv in pairs(b) do
-table.insert(_0x8C0A, tostring(kk) ..string.char(61).. tostring(vv))
-end
-_0x0EFE =string.char(123).. table.concat(_0x8C0A,string.char(44,32)) ..string.char(125)end
-print(string.char(91,83,84,65,84,83,93), tostring(a), _0x0EFE)
-end
-end
-end
-_0x0AF0(string.char(83,97,118,101,32,107,101,121,115,32,112,114,105,110,116,101,100,32,105,110,32,79,117,116,112,117,116,32,40,70,57,41))
-end)
-task.spawn(function()
-local _0x0F80 = os.clock()
-while _0x38D3.Parent do
-task.wait(1)
-local _0x1F57 = os.clock()
-local _0xD6CF = _0x1F57 - _0x0F80
-_0x0F80 = _0x1F57
-pcall(_0x041C, _0xD6CF)
-pcall(_0x51DA)
-end
-end)
-_0x51DA()task.spawn(function()
-while _0x38D3.Parent do
-_0xA2C1.dot.BackgroundColor3 = _0x1DBD and Color3.fromRGB(46, 204, 113) or _0xF719.muted
-task.wait(0.5)
-end
-end)local function _0xB9F8(remote, petId, quiet)
-if not _0x1DBD then return false end
-if not remote then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,82,101,109,111,116,101,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83))
-return false
-end
-local _0x57FC, _0x83A2 = pcall(function()
-return remote:InvokeServer(petId)
-end)
-if not _0x57FC then
-if not quiet then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,82,101,109,111,116,101,32,101,114,114,111,114,58), _0x83A2)
-end
-return false
-end
-if _0x83A2 == false then
-if not quiet then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,80,101,116,32,97,99,116,105,111,110,32,114,101,106,101,99,116,101,100,58), petId)
-end
-return false
-end
-return true
-endlocal function _0x5779(_0x5966)
-local _0x05CB = _0x42FB()
-if _0x05CB and type(_0x05CB.PetsEquipped) ==string.char(116,97,98,108,101)then
-return _0x05CB.PetsEquipped[_0x5966] ~= nil
-end
-return nil
-end
-local function _0x2213(_0x5966)
-if not _0x1DBD then return false end
-if _0xB9F8(_0x151D, _0x5966) then
-return true
-endreturn _0x5779(_0x5966) == true
-endlocal function _0x1869(_0x5966)
-return _0xB9F8(_0xE941, _0x5966, true)
-end
-local function _0x4F48()
-local _0x5BDE = 0
-for i, _0x5966 in ipairs(_0xE3AC) do
-if not _0x1DBD then return false end
-_0xE18C(string.char(69,113,117,105,112,112,105,110,103,32).. i ..string.char(47).. #_0xE3AC)
-if _0x2213(_0x5966) then
-_0x5BDE = _0x5BDE + 1
-else
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,67,111,117,108,100,32,110,111,116,32,101,113,117,105,112,32,115,109,97,108,108,32,112,101,116), i, _0x5966)
-end
-task.wait(0.15)
-end
-if _0x5BDE == 0 then
-return false
-endtask.wait(2)
-_0xE18C(_0x5BDE ..string.char(32,115,109,97,108,108,32,112,101,116,115,32,101,113,117,105,112,112,101,100))
-return _0x1DBD
-end
-local function _0xBDCB()
-for i, _0x5966 in ipairs(_0xE3AC) do
-if not _0x1DBD then return false end
-_0xE18C(string.char(85,110,101,113,117,105,112,112,105,110,103,32).. i ..string.char(47).. #_0xE3AC)
-_0x1869(_0x5966)
-task.wait(0.15)
-end
-return true
-endlocal function _0xAF6A(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return nil end
-local _0x6B2A = _0x7508:GetAttribute(string.char(72,101,97,108,116,104))
-if typeof(_0x6B2A) ==string.char(110,117,109,98,101,114)then
-return _0x6B2A
-end
-return nil
-end
-local function _0xFF79()
-local _0xC2CC = _0x9C17.Character
-return _0xC2CC and _0xC2CC:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))
-end
-local function _0x6557(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return nil end
-if _0x7508:IsA(string.char(80,86,73,110,115,116,97,110,99,101)) then
-local _0x57FC, _0xFFCD = pcall(function()
-return _0x7508:GetPivot()
-end)
-if _0x57FC and _0xFFCD then
-return _0xFFCD.Position
-end
-end
-for _, _0x42EE in ipairs(_0x7508:GetDescendants()) do
-if _0x42EE:IsA(string.char(66,97,115,101,80,97,114,116)) then
-return _0x42EE.Position
-end
-end
-return nil
-end
-local function _0x14C8(_0x7508)
-local _0x3FD9 = _0xFF79()
-local _0x3873 = _0x6557(_0x7508)
-if _0x3FD9 and _0x3873 then
-return (_0x3FD9.Position - _0x3873).Magnitude
-end
-return nil
-endlocal function _0x935C(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return false end
-local _0x57FC, _0x39BE = pcall(function()
-_0x7702.Signal.Fire(string.char(83,101,108,101,99,116,32,67,111,105,110), _0x7508)
-end)
-if not _0x57FC then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,83,101,108,101,99,116,32,101,114,114,111,114,58), _0x39BE)
-return false
-end
-return true
-end
-local function _0x7409(_0xB237)
-local _0xAE01
-local _0x5F24 = math.huge
-for _, _0x7508 in ipairs(_0xE0E9:GetChildren()) do
-if not _0xB237[_0x7508] then
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A and _0x6B2A > _0x75D4 then
-local _0xE4CC = math.abs(_0x6B2A - _0x4B4F)
-if _0xE4CC <= _0xD9D8
-and _0xE4CC < _0x5F24 then
-_0xAE01 = _0x7508
-_0x5F24 = _0xE4CC
-end
-end
-end
-end
-return _0xAE01
-endlocal function _0xC736(_0xB237)
-local _0xAE01
-local _0x33DE = math.huge
-for _, _0x7508 in ipairs(_0xE0E9:GetChildren()) do
-if not _0xB237[_0x7508] then
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A and _0x6B2A > 0 and _0x6B2A < _0x75D4 then
-local _0x5792 = _0x9713[_0x7508] == true
-local _0x8D1A = _0x14C8(_0x7508) or 0
-if _0x5792 or _0x8D1A <= _0x7914 then
-local _0xCD44 = _0x8D1A
-if _0x5792 then
-_0xCD44 = _0xCD44 - 1000000
-end
-if _0xCD44 < _0x33DE then
-_0xAE01 = _0x7508
-_0x33DE = _0xCD44
-end
-end
-end
-end
-end
-return _0xAE01
-endlocal function _0x423D()
-_0x0AF0(string.char(80,114,101,112,97,114,105,110,103,32,68,114,97,103,111,110))for _0x7508 in pairs(_0x9713) do
-if not _0x7508.Parent then
-_0x9713[_0x7508] = nil
-end
-end
-if not _0xBDCB() then
-return false
-end
-if not _0x1DBD then return false end
-_0xE18C(string.char(69,109,112,121,114,101,97,110,32,68,114,97,103,111,110))
-if not _0x2213(_0xDB8D) then
-_0x0AF0(string.char(68,114,97,103,111,110,32,101,113,117,105,112,32,102,97,105,108,101,100,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,97,103,97,105,110))
-return false
-end
-task.wait(0.5)
-local _0xB237 = {}
-while _0x1DBD do
-local _0x7508 = _0x7409(_0xB237)
-if not _0x7508 then
-break
-end
-_0x0AF0(string.char(68,114,97,103,111,110,32,97,116,116,97,99,107,105,110,103,32).. _0x7508.Name)
-if not _0x935C(_0x7508) then
-_0xB237[_0x7508] = true
-task.wait(0.5)
-continue
-end
-local _0x41A7 = false
-local _0x5544 = nil
-local _0xCA56 = os.clock()
-local _0x013F = 0
-while _0x1DBD and _0x7508.Parent do
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A then
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32).. string.format(string.char(37,46,48,102), _0x6B2A)
-if _0x6B2A <= _0x75D4 then
-_0x41A7 = true
-break
-end
-if not _0x5544 or _0x6B2A < _0x5544 then
-_0x5544 = _0x6B2A
-_0xCA56 = os.clock()
-_0x013F = 0
-end
-endif os.clock() - _0xCA56 >= _0xA1AA then
-if _0x013F >= _0x9C53 then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,68,114,97,103,111,110,32,105,115,32,110,111,116,32,100,97,109,97,103,105,110,103), _0x7508.Name,string.char(45,32,115,107,105,112,112,105,110,103))
-break
-end
-_0x013F = _0x013F + 1
-_0x0AF0(string.char(82,101,45,115,101,108,101,99,116,105,110,103,32).. _0x7508.Name ..string.char(32,40).. _0x013F ..string.char(47).. _0x9C53 ..string.char(41))
-_0x935C(_0x7508)
-_0xCA56 = os.clock()
-end
-task.wait(0.25)
-end
-if _0x41A7 then
-_0x9713[_0x7508] = true
-_0xB237[_0x7508] = true
-_0x1F4D(string.char(80,114,101,115,101,110,116,32,114,101,97,100,121,32,102,111,114,32,115,109,97,108,108,32,112,101,116,115,58), _0x7508.Name)
-else_0xB237[_0x7508] = true
-if _0x7508.Parent then
-task.wait(0.5)
-end
-end
-end
-return _0x1DBD
-endlocal function _0x280C(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return true end
-local _0x6B2A = _0xAF6A(_0x7508)
-if not _0x6B2A or _0x6B2A <= 0 then return true end
-if _0x6B2A >= _0x75D4 then return false end
-_0x0AF0(string.char(83,109,97,108,108,32,112,101,116,115,32,116,97,114,103,101,116,105,110,103,32).. _0x7508.Name)
-_0xE18C(#_0xE3AC ..string.char(32,115,109,97,108,108,32,112,101,116,115,32,97,116,116,97,99,107,105,110,103))
-_0x1F4D(string.char(84,97,114,103,101,116), _0x7508.Name,string.char(72,80), _0x6B2A,string.char(68,105,115,116,97,110,99,101), _0x14C8(_0x7508))
-_0x935C(_0x7508)
-local _0x27E4 = _0x6B2A
-local _0xCA56 = os.clock()
-local _0x013F = 0
-while _0x1DBD and _0x7508.Parent do
-task.wait(0.25)
-_0x6B2A = _0xAF6A(_0x7508)
-if not _0x6B2A or _0x6B2A <= 0 then
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,68,101,115,116,114,111,121,101,100)return true
-end
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32).. string.format(string.char(37,46,48,102), _0x6B2A)
-if _0x6B2A < _0x27E4 then
-_0x27E4 = _0x6B2A
-_0xCA56 = os.clock()
-_0x013F = 0
-endif os.clock() - _0xCA56 >= _0x6944 then
-if _0x013F >= _0x9C53 then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,80,101,116,115,32,97,114,101,32,110,111,116,32,100,97,109,97,103,105,110,103), _0x7508.Name,string.char(45,32,115,107,105,112,112,105,110,103))
-return false
-end
-_0x013F = _0x013F + 1
-_0x0AF0(string.char(82,101,45,115,101,108,101,99,116,105,110,103,32).. _0x7508.Name ..string.char(32,40).. _0x013F ..string.char(47).. _0x9C53 ..string.char(41))
-_0x935C(_0x7508)
-_0xCA56 = os.clock()
-end
-end
-return not _0x7508.Parent
-end
-local function _0xE20C()
-_0x0AF0(string.char(83,119,105,116,99,104,105,110,103,32,116,111,32,115,109,97,108,108,32,112,101,116,115))
-_0xE18C(string.char(85,110,101,113,117,105,112,112,105,110,103,32,100,114,97,103,111,110))
-_0x1869(_0xDB8D)
-if not _0x1DBD then return false end
-if not _0x4F48() then
-return false
-end
-local _0xB237 = {}
-while _0x1DBD do
-local _0x7508 = _0xC736(_0xB237)
-if not _0x7508 then
-break
-end
-local _0x7A23 = _0x280C(_0x7508)
-if not _0x1DBD then return false end_0xB237[_0x7508] = true
-if _0x7A23 or not _0x7508.Parent then
-_0xC65D()
-_0x0AF0(string.char(80,114,101,115,101,110,116,32,100,101,115,116,114,111,121,101,100))
-else
-_0x0AF0(string.char(83,107,105,112,112,101,100,32).. _0x7508.Name)
-task.wait(0.5)
-end
-end
-return _0x1DBD
-endlocal function _0x91D7()
-if _0x6625 then return end
-_0x6625 = true
-while _0x1DBD do
-_0x0AF0(string.char(83,116,97,114,116,105,110,103,32,68,114,97,103,111,110,32,112,104,97,115,101))
-if not _0x423D() then
-if not _0x1DBD then break end
-_0x0AF0(string.char(68,114,97,103,111,110,32,112,104,97,115,101,32,114,101,116,114,121))
-task.wait(1)
-continue
-end
-if not _0x1DBD then break end
-if not _0xE20C() then
-if not _0x1DBD then break end
-_0x0AF0(string.char(83,109,97,108,108,32,112,101,116,115,32,112,104,97,115,101,32,114,101,116,114,121))
-task.wait(1)
-continue
-end
-if not _0x1DBD then break end
-_0x0AF0(string.char(65,108,108,32,112,114,101,115,101,110,116,115,32,100,101,115,116,114,111,121,101,100))
-_0xBDCB()
-if not _0x1DBD then break end
-_0xAB6B()
-_0x0AF0(string.char(80,114,101,112,97,114,105,110,103,32,110,101,120,116,32,68,114,97,103,111,110,32,99,121,99,108,101))
-task.wait(0.5)
-end
-_0x6625 = false
-_0x1DBD = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(83,116,111,112,112,101,100))
-_0xE18C(string.char(78,111,110,101))
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,87,97,105,116,105,110,103)end_0xC2A6.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x1DBD = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(83,116,111,112,112,105,110,103,46,46,46))
-else
-if _0x294D ~= 0 then
-_0x0AF0(string.char(70,105,110,105,115,104,32,99,97,108,105,98,114,97,116,105,111,110,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-_0x1DBD = true
-_0xC2A6.Text =string.char(83,84,79,80,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(180, 55, 65)
-_0x0AF0(string.char(83,116,97,114,116,105,110,103,46,46,46))
-task.spawn(function()
-local _0x57FC, _0x39BE = pcall(_0x91D7)
-if not _0x57FC then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,32,67,82,65,83,72,93), _0x39BE)
-_0x1DBD = false
-_0x6625 = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(69,82,82,79,82,32,45,32,99,104,101,99,107,32,79,117,116,112,117,116))
-end
-end)
-end
-end)
-_0x5773.MouseButton1Click:Connect(function()
-_0x1DBD = false
-_0x38D3:Destroy()
-end)
-if _0x151D and _0xE941 then
-_0x0AF0(string.char(82,101,97,100,121))
-else
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,111,114,32,116,121,112,101,32,116,104,101,32,35,32,98,111,120,101,115))
-end
-endlocal function _0x2C5D()
-local _0x57FC, _0x5966 = pcall(function()
-if gethwid then
-return gethwid()
-end
-return nil
-end)
-if _0x57FC and type(_0x5966) ==string.char(115,116,114,105,110,103)and #_0x5966 > 0 then
-return _0x5966
-end
-local _0x4CD8, _0xF08E = pcall(function()
-return game:GetService(string.char(82,98,120,65,110,97,108,121,116,105,99,115,83,101,114,118,105,99,101)):GetClientId()
-end)
-if _0x4CD8 and type(_0xF08E) ==string.char(115,116,114,105,110,103)and #_0xF08E > 0 then
-return _0xF08E
-end
-return nil
-end
-local _0xD2CF = _0x2C5D()local _0xF719 = {
-bg = Color3.fromRGB(14, 16, 24),
-title = Color3.fromRGB(19, 22, 33),
-panel = Color3.fromRGB(24, 28, 41),
-border = Color3.fromRGB(42, 48, 68),
-text = Color3.fromRGB(235, 238, 246),
-muted = Color3.fromRGB(135, 144, 168),
-accent = Color3.fromRGB(86, 128, 255),
-accent2 = Color3.fromRGB(155, 92, 255),
-green = Color3.fromRGB(40, 190, 120),
-red = Color3.fromRGB(226, 78, 90),
-yellow = Color3.fromRGB(255, 196, 90),
-}
-local function _0x6442(class, props, parent)
-local _0x8C8D = Instance.new(class)
-for k, v in pairs(props) do
-_0x8C8D[k] = v
-end
-_0x8C8D.Parent = parent
-return _0x8C8D
-end
-local function _0x34AC(_0x8C8D, radius)
-local _0x15E8 = Instance.new(string.char(85,73,67,111,114,110,101,114))
-_0x15E8.CornerRadius = UDim.new(0, radius)
-_0x15E8.Parent = _0x8C8D
-return _0x15E8
-end
-local function _0x4C8B(_0x8C8D, _0x832E, thickness)
-local _0xD5C8 = Instance.new(string.char(85,73,83,116,114,111,107,101))
-_0xD5C8.Color = _0x832E
-_0xD5C8.Thickness = thickness
-_0xD5C8.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-_0xD5C8.Parent = _0x8C8D
-return _0xD5C8
-end
-local function _0x443A(_0x8C8D, time, props)
-_0x4207:Create(
-_0x8C8D,
-TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-props
-):Play()
-end
-local function _0xFC6A()
-local _0x57FC, _0xA2C1 = pcall(function()
-return gethui and gethui()
-end)
-if _0x57FC and _0xA2C1 then
-return _0xA2C1
-end
-return _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105))
-endlocal _0xA20A = _0xFC6A()
-local _0x177D = _0xA20A:FindFirstChild(string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,76,111,97,100,101,114))
-if _0x177D then
-_0x177D:Destroy()
-end
-local _0x38D3 = _0x6442(string.char(83,99,114,101,101,110,71,117,105), {
-Name =string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,76,111,97,100,101,114),
-ResetOnSpawn = false,
-ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-}, _0xA20A)
-local _0x8A72 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(340, 0),
-AutomaticSize = Enum.AutomaticSize.Y,
-Position = UDim2.new(0.5, -170, 0.5, -150),
-BackgroundColor3 = _0xF719.bg,
-BorderSizePixel = 0,
-Active = true,
-ClipsDescendants = true,
-}, _0x38D3)
-_0x34AC(_0x8A72, 14)
-_0x4C8B(_0x8A72, _0xF719.border, 1.5)
-_0x6442(string.char(85,73,76,105,115,116,76,97,121,111,117,116), {
-SortOrder = Enum.SortOrder.LayoutOrder,
-}, _0x8A72)
-local _0xAB60 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-LayoutOrder = 1,
-}, _0x8A72)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 6),
-Size = UDim2.new(1, -70, 0, 20),
-Text =string.char(69,77,80,89,82,69,65,78,32,68,82,65,71,79,78),
-Font = Enum.Font.GothamBold,
-TextSize = 16,
-TextColor3 = _0xF719.text,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 25),
-Size = UDim2.new(1, -70, 0, 14),
-Text =string.char(76,105,99,101,110,115,101,32,118,101,114,105,102,105,99,97,116,105,111,110),
-Font = Enum.Font.Gotham,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-local _0x5773 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.fromOffset(26, 26),
-Position = UDim2.new(1, -36, 0, 10),
-BackgroundColor3 = _0xF719.red,
-AutoButtonColor = false,
-BorderSizePixel = 0,
-Text =string.char(88),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 13,
-}, _0xAB60)
-_0x34AC(_0x5773, 7)
-local _0x3CD7 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 2),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-LayoutOrder = 2,
-}, _0x8A72)
-do
-local _0xE8C6 = Instance.new(string.char(85,73,71,114,97,100,105,101,110,116))
-_0xE8C6.Color = ColorSequence.new(_0xF719.accent, _0xF719.accent2)
-_0xE8C6.Parent = _0x3CD7
-end
-local _0x67A2 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 0),
-AutomaticSize = Enum.AutomaticSize.Y,
-BackgroundTransparency = 1,
-LayoutOrder = 3,
-}, _0x8A72)
-_0x6442(string.char(85,73,80,97,100,100,105,110,103), {
-PaddingTop = UDim.new(0, 16),
-PaddingBottom = UDim.new(0, 16),
-PaddingLeft = UDim.new(0, 16),
-PaddingRight = UDim.new(0, 16),
-}, _0x67A2)
-_0x6442(string.char(85,73,76,105,115,116,76,97,121,111,117,116), {
-Padding = UDim.new(0, 10),
-SortOrder = Enum.SortOrder.LayoutOrder,
-}, _0x67A2)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 20),
-BackgroundTransparency = 1,
-Text =string.char(69,110,116,101,114,32,121,111,117,114,32,107,101,121),
-Font = Enum.Font.GothamBold,
-TextSize = 15,
-TextColor3 = _0xF719.text,
-TextXAlignment = Enum.TextXAlignment.Left,
-LayoutOrder = 1,
-}, _0x67A2)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 32),
-BackgroundTransparency = 1,
-Text =string.char(69,97,99,104,32,107,101,121,32,119,111,114,107,115,32,111,110,32,111,110,101,32,100,101,118,105,99,101,32,111,110,108,121,46,32,84,104,101,32,102,105,114,115,116,32,100,101,118,105,99,101,32,116,104,97,116,32,117,115,101,115,32,97,32,107,101,121,32,105,115,32,108,111,99,107,101,100,32,116,111,32,105,116,46),
-Font = Enum.Font.Gotham,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-LayoutOrder = 2,
-}, _0x67A2)
-local _0x17CB = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 42),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-LayoutOrder = 3,
-}, _0x67A2)
-_0x34AC(_0x17CB, 9)
-local _0x516C = _0x4C8B(_0x17CB, _0xF719.border, 1)
-local _0xD49A = _0x6442(string.char(84,101,120,116,66,111,120), {
-Size = UDim2.new(1, -24, 1, 0),
-Position = UDim2.fromOffset(12, 0),
-BackgroundTransparency = 1,
-Text ="",
-PlaceholderText =string.char(88,88,88,88,45,88,88,88,88,45,88,88,88,88,45,88,88,88,88),
-PlaceholderColor3 = _0xF719.muted,
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamMedium,
-TextSize = 14,
-ClearTextOnFocus = false,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0x17CB)
-_0xD49A.Focused:Connect(function()
-_0x443A(_0x516C, 0.15, { Color = _0xF719.accent })
-end)
-_0xD49A.FocusLost:Connect(function()
-_0x443A(_0x516C, 0.15, { Color = _0xF719.border })
-end)
-local _0x6992 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.new(1, 0, 0, 44),
-BackgroundColor3 = _0xF719.accent,
-AutoButtonColor = false,
-BorderSizePixel = 0,
-Text =string.char(65,67,84,73,86,65,84,69),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-LayoutOrder = 4,
-}, _0x67A2)
-_0x34AC(_0x6992, 9)
-_0x6992.MouseEnter:Connect(function()
-_0x443A(_0x6992, 0.12, { BackgroundColor3 = _0xF719.accent:Lerp(Color3.new(1, 1, 1), 0.12) })
-end)
-_0x6992.MouseLeave:Connect(function()
-_0x443A(_0x6992, 0.12, { BackgroundColor3 = _0xF719.accent })
-end)
-local _0x1DA4 = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 16),
-BackgroundTransparency = 1,
-Text ="",
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-LayoutOrder = 5,
-}, _0x67A2)
-local _0xFD0B = _0xD2CF and (string.sub(_0xD2CF, 1, 8) ..string.char(46,46,46)) orstring.char(117,110,97,118,97,105,108,97,98,108,101)_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 14),
-BackgroundTransparency = 1,
-Text =string.char(68,101,118,105,99,101,32,73,68,58,32).. _0xFD0B ..string.char(32,32,40,117,115,101,100,32,116,111,32,108,111,99,107,32,121,111,117,114,32,107,101,121,41),
-Font = Enum.Font.Gotham,
-TextSize = 10,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-LayoutOrder = 6,
-}, _0x67A2)
-local function _0x0AF0(text, _0x832E)
-_0x1DA4.Text = text
-_0x1DA4.TextColor3 = _0x832E or _0xF719.muted
-end
-local function _0xDAB4(_0x8C8D)
-local _0xA724 = _0x8C8D.Position
-for _, dx in ipairs({ -6, 6, -4, 4, 0 }) do
-_0x443A(_0x8C8D, 0.04, { Position = _0xA724 + UDim2.fromOffset(dx, 0) })
-task.wait(0.045)
-end
-endlocal _0xB4BD = false
-local _0xB773
-local _0xEB13
-local function _0x9221(input)
-return input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch
-end
-_0xAB60.InputBegan:Connect(function(input)
-if _0x9221(input) then
-_0xB4BD = true
-_0xB773 = input.Position
-_0xEB13 = _0x8A72.Position
-end
-end)
-_0x2699.InputChanged:Connect(function(input)
-if _0xB4BD
-and (input.UserInputType == Enum.UserInputType.MouseMovement
-or input.UserInputType == Enum.UserInputType.Touch) then
-local _0xB441 = input.Position - _0xB773
-_0x8A72.Position = UDim2.new(
-_0xEB13.X.Scale,
-_0xEB13.X.Offset + _0xB441.X,
-_0xEB13.Y.Scale,
-_0xEB13.Y.Offset + _0xB441.Y
-)
-end
-end)
-_0x2699.InputEnded:Connect(function(input)
-if _0x9221(input) then
-_0xB4BD = false
-end
-end)local function _0x58CF()
-local _0x9948 = {}
+
+-- prefill the saved key
 pcall(function()
-if isfile and readfile and isfile(_0x3DAD) then
-local _0x8059 = _0x6CAE:JSONDecode(readfile(_0x3DAD))
-if type(_0x8059) ==string.char(116,97,98,108,101)then
-_0x9948 = _0x8059
-end
-end
-end)
-return _0x9948
-end
-local function _0xD9F7(_0x9948)
-pcall(function()
-if writefile then
-writefile(_0x3DAD, _0x6CAE:JSONEncode(_0x9948))
-end
-end)
-end
-local function _0xDA7F(_0x7081)
-if not _0x80EE[_0x7081] then
-return false,string.char(73,110,118,97,108,105,100,32,107,101,121)end
-if not _0xD2CF then
-return false,string.char(67,111,117,108,100,32,110,111,116,32,114,101,97,100,32,121,111,117,114,32,100,101,118,105,99,101,32,73,68)end
-local _0xE10F = _0x58CF()
-local _0xB57F = _0xE10F[_0x7081]
-if _0xB57F and _0xB57F ~= _0xD2CF then
-return false,string.char(84,104,105,115,32,107,101,121,32,105,115,32,108,111,99,107,101,100,32,116,111,32,97,110,111,116,104,101,114,32,100,101,118,105,99,101)end
-if not _0xB57F then
-_0xE10F[_0x7081] = _0xD2CF
-_0xD9F7(_0xE10F)
-end
-return true
-end
-local _0x54A3 = false
-local function _0x81BF()
-if _0x54A3 then return endlocal _0xDBCD = (_0xD49A.Text or""):gsub(string.char(37,115,43),"")
-local _0x7081 = string.lower(_0xDBCD)
-if #_0x7081 < 8 then
-_0x0AF0(string.char(69,110,116,101,114,32,97,32,118,97,108,105,100,32,107,101,121), _0xF719.red)
-_0xDAB4(_0x17CB)
-return
-end
-_0x54A3 = true
-_0x6992.Text =string.char(67,72,69,67,75,73,78,71,46,46,46)_0x0AF0(string.char(67,104,101,99,107,105,110,103,32,107,101,121,46,46,46), _0xF719.muted)
-local _0x57FC, _0x83A2 = _0xDA7F(_0x7081)
-if not _0x57FC then
-_0x54A3 = false
-_0x6992.Text =string.char(65,67,84,73,86,65,84,69)_0x0AF0(_0x83A2, _0xF719.red)
-_0xDAB4(_0x17CB)
-return
-end
-pcall(function()
-if writefile then
-writefile(_0xD619, _0x7081)
-end
-end)
-_0x6992.Text =string.char(85,78,76,79,67,75,69,68)_0x443A(_0x6992, 0.2, { BackgroundColor3 = _0xF719.green })
-_0x0AF0(string.char(75,101,121,32,97,99,99,101,112,116,101,100,32,45,32,108,111,97,100,105,110,103,32,109,101,110,117,46,46,46), _0xF719.green)
-task.wait(0.7)
-_0x38D3:Destroy()
-task.spawn(function()
-local _0xDEF9, _0x615F = pcall(_0x6AE2)
-if not _0xDEF9 then
-warn(string.char(91,76,79,65,68,69,82,93,32,115,99,114,105,112,116,32,101,114,114,111,114,58), _0x615F)
-end
-end)
-end
-_0x6992.MouseButton1Click:Connect(_0x81BF)
-_0xD49A.FocusLost:Connect(function(enterPressed)
-if enterPressed then
-_0x81BF()
-end
-end)
-_0x5773.MouseButton1Click:Connect(function()
-_0x38D3:Destroy()
-end)pcall(function()
-if isfile and readfile and isfile(_0xD619) then
-_0xD49A.Text = readfile(_0xD619)
-end
-end)local _0xD619 =string.char(97,110,103,101,108,117,115,95,107,101,121,46,116,120,116)local _0x3DAD =string.char(97,110,103,101,108,117,115,95,98,105,110,100,46,106,115,111,110)local _0x80EE = {
-[string.char(107,105,110,103,45,97,55,120,57,50,45,109,52,113,56,49)] = true,
-[string.char(107,105,110,103,45,122,56,51,107,112,45,57,50,109,120,53)] = true,
-[string.char(107,105,110,103,45,52,110,113,55,50,45,120,56,98,51,49)] = true,
-[string.char(107,105,110,103,45,112,57,119,52,50,45,107,54,100,56,51)] = true,
-[string.char(107,105,110,103,45,55,120,109,50,49,45,113,52,118,57,53)] = true,
-[string.char(107,105,110,103,45,98,56,50,122,110,45,53,107,113,55,51)] = true,
-[string.char(107,105,110,103,45,109,52,120,57,49,45,116,56,112,50,54)] = true,
-[string.char(107,105,110,103,45,57,50,107,102,122,45,55,119,51,110,53)] = true,
-[string.char(107,105,110,103,45,113,56,49,118,54,45,109,50,57,120,112)] = true,
-[string.char(107,105,110,103,45,53,112,51,120,56,45,110,55,107,52,50)] = true,
-}
-local _0xFB70 = game:GetService(string.char(80,108,97,121,101,114,115))
-local _0x2699 = game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))
-local _0x4207 = game:GetService(string.char(84,119,101,101,110,83,101,114,118,105,99,101))
-local _0x6CAE = game:GetService(string.char(72,116,116,112,83,101,114,118,105,99,101))
-local _0x9C17 = _0xFB70.LocalPlayerlocal function _0x6AE2()
-local _0xFB70 = game:GetService(string.char(80,108,97,121,101,114,115))
-local _0xB9C7 = game:GetService(string.char(82,101,112,108,105,99,97,116,101,100,83,116,111,114,97,103,101))
-local _0x2699 = game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))
-local _0x9C17 = _0xFB70.LocalPlayer
-local _0x7702 = require(
-_0xB9C7:WaitForChild(string.char(70,114,97,109,101,119,111,114,107)):WaitForChild(string.char(76,105,98,114,97,114,121))
-)
-repeat task.wait() until _0x7702.Loaded
-local _0xE0E9 = _0x7702.Things:WaitForChild(string.char(67,111,105,110,115))local _0x75D4 = 1200000
-local _0x4B4F = 67500000
-local _0xD9D8 = 150000local _0x7914 = 250
-local _0x6944 = 3local _0xA1AA = 10local _0x9C53 = 3local _0x452C = falselocal _0x80D2 =string.char(68,105,97,109,111,110,100,115)local _0x7BAD = nillocal _0xDB8D =string.char(105,100,56,56,50,54,57,56,57,100,56,54,52,57,52,57,52,52,98,50,57,99,99,101,97,49,97,97,101,101,53,98,49,57)local _0xE3AC = {string.char(105,100,97,99,51,50,48,56,97,97,52,98,98,48,52,55,48,52,57,48,55,57,54,97,98,50,57,51,55,98,100,53,53,57),string.char(105,100,98,51,52,57,51,56,54,54,101,102,56,48,52,99,54,52,98,52,50,48,97,56,98,52,101,101,101,48,57,97,52,49),string.char(105,100,48,55,100,57,53,48,56,100,53,51,52,53,52,54,102,99,97,101,97,54,102,101,48,48,57,100,54,50,51,97,48,56),string.char(105,100,50,102,56,98,48,99,54,98,49,100,53,48,52,56,98,101,97,49,101,100,57,102,97,49,53,49,57,48,52,51,51,48),string.char(105,100,100,56,55,49,97,49,101,100,99,97,53,56,52,54,100,102,56,49,54,54,56,52,102,102,56,52,51,56,99,100,100,48),string.char(105,100,99,51,53,97,101,54,54,100,101,97,48,100,52,101,100,102,56,50,57,97,48,51,101,97,55,56,48,101,48,57,53,101),string.char(105,100,97,99,98,102,53,101,54,54,101,53,57,49,52,51,50,99,57,55,100,49,48,49,55,52,100,98,98,55,54,98,53,56),string.char(105,100,55,97,99,54,57,50,100,48,50,49,57,101,52,98,54,57,97,55,51,55,50,102,53,57,100,99,98,100,52,97,51,98),string.char(105,100,101,56,54,57,99,51,54,99,48,56,52,52,52,97,49,57,98,53,102,54,97,50,48,98,49,99,49,57,56,51,48,54),string.char(105,100,53,52,100,98,98,53,98,101,50,99,57,100,52,52,53,51,97,55,54,97,100,49,48,99,54,101,53,49,101,99,57,55),
-}local _0x2CFB = 0
-local _0xAC21 = 0
-local _0x151D
-local _0xE941
-if _0x2CFB > 0 and _0xAC21 > 0 then
-local _0x14D3 = _0xB9C7:GetChildren()
-local _0xE17D = _0x14D3[_0x2CFB]
-local _0xE401 = _0x14D3[_0xAC21]
-if _0xE17D and _0xE17D:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)) then _0x151D = _0xE17D end
-if _0xE401 and _0xE401:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)) then _0xE941 = _0xE401 end
-if not (_0x151D and _0xE941) then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,70,65,76,76,66,65,67,75,32,105,110,100,101,120,101,115,32,97,114,101,32,110,111,116,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110,115,32,45,32,117,115,101,32,67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83))
-end
-endlocal _0x1DBD = false
-local _0x6625 = falselocal _0x9713 = {}local _0x4207 = game:GetService(string.char(84,119,101,101,110,83,101,114,118,105,99,101))
-local _0xF719 = {
-bg = Color3.fromRGB(14, 16, 24),
-title = Color3.fromRGB(19, 22, 33),
-panel = Color3.fromRGB(24, 28, 41),
-border = Color3.fromRGB(42, 48, 68),
-text = Color3.fromRGB(235, 238, 246),
-muted = Color3.fromRGB(135, 144, 168),
-accent = Color3.fromRGB(86, 128, 255),
-accent2 = Color3.fromRGB(155, 92, 255),
-green = Color3.fromRGB(35, 155, 90),
-red = Color3.fromRGB(180, 55, 65),
-yellow = Color3.fromRGB(255, 200, 100),
-blue = Color3.fromRGB(110, 190, 255),
-}
-local function _0x6442(class, props, parent)
-local _0x8C8D = Instance.new(class)
-for k, v in pairs(props) do
-_0x8C8D[k] = v
-end
-_0x8C8D.Parent = parent
-return _0x8C8D
-end
-local function _0x34AC(_0x8C8D, radius)
-local _0x15E8 = Instance.new(string.char(85,73,67,111,114,110,101,114))
-_0x15E8.CornerRadius = UDim.new(0, radius)
-_0x15E8.Parent = _0x8C8D
-return _0x15E8
-end
-local function _0x4C8B(_0x8C8D, _0x832E, thickness)
-local _0xD5C8 = Instance.new(string.char(85,73,83,116,114,111,107,101))
-_0xD5C8.Color = _0x832E
-_0xD5C8.Thickness = thickness
-_0xD5C8.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-_0xD5C8.Parent = _0x8C8D
-return _0xD5C8
-end
-local function _0x0041(_0x8C8D, c1, c2)
-local _0xE8C6 = Instance.new(string.char(85,73,71,114,97,100,105,101,110,116))
-_0xE8C6.Color = ColorSequence.new(c1, c2)
-_0xE8C6.Parent = _0x8C8D
-return _0xE8C6
-end
-local function _0x443A(_0x8C8D, time, props)
-_0x4207:Create(
-_0x8C8D,
-TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-props
-):Play()
-end
-local _0x3152 = 520
-local _0x2114 = 440
-local _0xF1C4 = 90
-local _0xA377 = _0x2114 - _0xF1C4 - 36
-local _0xA2C1 = { tabs = {}, pages = {}, _0x5EC9 = {} }
-do
-local _0x177D = _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105)):FindFirstChild(string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,65,117,116,111,70,97,114,109))
-if _0x177D then
-_0x177D:Destroy()
-end
-end
-local _0x38D3 = _0x6442(string.char(83,99,114,101,101,110,71,117,105), {
-Name =string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,65,117,116,111,70,97,114,109),
-ResetOnSpawn = false,
-ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-}, _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105)))
-local _0xBB10 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(_0x3152, _0x2114),
-Position = UDim2.new(0.5, -_0x3152 / 2, 0.5, -_0x2114 / 2),
-BackgroundColor3 = _0xF719.bg,
-BorderSizePixel = 0,
-Active = true,
-ClipsDescendants = true,
-}, _0x38D3)
-_0x34AC(_0xBB10, 14)
-_0x4C8B(_0xBB10, _0xF719.border, 1.5)local _0xAB60 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.dot = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(10, 10),
-Position = UDim2.fromOffset(16, 18),
-BackgroundColor3 = _0xF719.muted,
-BorderSizePixel = 0,
-}, _0xAB60)
-_0x34AC(_0xA2C1.dot, 5)
-local _0x01CA = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, -90, 1, 0),
-Position = UDim2.fromOffset(36, 0),
-BackgroundTransparency = 1,
-Text =string.char(69,77,80,89,82,69,65,78,32,68,82,65,71,79,78,32,65,85,84,79,32,70,65,82,77),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 17,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-local _0x5773 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.fromOffset(28, 28),
-Position = UDim2.new(1, -40, 0, 9),
-BackgroundColor3 = _0xF719.red,
-Text =string.char(88),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-}, _0xAB60)
-_0x34AC(_0x5773, 7)
-_0x0041(_0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 2),
-Position = UDim2.fromOffset(0, 46),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-}, _0xBB10), _0xF719.accent, _0xF719.accent2)local _0xCED6 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, 48),
-Size = UDim2.new(1, 0, 0, 38),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.indicator = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1 / 3, -24, 0, 3),
-Position = UDim2.new(0, 12, 1, -3),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-}, _0xCED6)
-_0x34AC(_0xA2C1.indicator, 2)
-_0x0041(_0xA2C1.indicator, _0xF719.accent, _0xF719.accent2)
-for i, name in ipairs({string.char(70,65,82,77),string.char(83,84,65,84,83),string.char(83,69,84,85,80)}) do
-_0xA2C1.tabs[i] = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.new((i - 1) / 3, 0, 0, 0),
-Size = UDim2.new(1 / 3, 0, 1, -3),
-BackgroundTransparency = 1,
-AutoButtonColor = false,
-Text = name,
-Font = Enum.Font.GothamBold,
-TextSize = 13,
-TextColor3 = _0xF719.muted,
-}, _0xCED6)
-_0xA2C1.pages[i] = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, _0xF1C4),
-Size = UDim2.new(1, 0, 0, _0xA377),
-BackgroundTransparency = 1,
-Visible = (i == 1),
-}, _0xBB10)
-end
-local function _0xBAE9(index)
-for i = 1, 3 do
-_0xA2C1.pages[i].Visible = (i == index)
-_0xA2C1.tabs[i].TextColor3 = (i == index) and _0xF719.text or _0xF719.muted
-end
-_0x443A(_0xA2C1.indicator, 0.2, { Position = UDim2.new((index - 1) / 3, 12, 1, -3) })
-end
-for i = 1, 3 do
-_0xA2C1.tabs[i].MouseButton1Click:Connect(function()
-_0xBAE9(i)
-end)
-end
-_0xBAE9(1)local _0xF3BC = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(0, _0x2114 - 36),
-Size = UDim2.new(1, 0, 0, 36),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-}, _0xBB10)
-_0xA2C1.footer = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 0),
-Size = UDim2.new(1, -32, 1, 0),
-Text =string.char(82,101,97,100,121),
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0xF3BC)local function _0xDA08(parent, y, _0x832E)
-local _0x61F3 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(12, y),
-Size = UDim2.new(1, -24, 0, 38),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-}, parent)
-_0x34AC(_0x61F3, 9)
-_0x4C8B(_0x61F3, _0xF719.border, 1)
-return _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 0),
-Size = UDim2.new(1, -28, 1, 0),
-Text ="",
-Font = Enum.Font.GothamMedium,
-TextSize = 13,
-TextColor3 = _0x832E,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0x61F3)
-endlocal function _0x240D(parent, col, y, caption, _0x832E)
-local _0xB74F = (_0x3152 - 24 - 16) / 3
-local _0xF1F3 = _0x6442(string.char(70,114,97,109,101), {
-Position = UDim2.fromOffset(12 + col * (_0xB74F + 8), y),
-Size = UDim2.fromOffset(_0xB74F, 76),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-}, parent)
-_0x34AC(_0xF1F3, 10)
-_0x4C8B(_0xF1F3, _0xF719.border, 1)
-_0x34AC(_0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, -24, 0, 2),
-Position = UDim2.fromOffset(12, 0),
-BackgroundColor3 = _0x832E,
-BorderSizePixel = 0,
-}, _0xF1F3), 1)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 14),
-Text = caption,
-Font = Enum.Font.GothamMedium,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xF1F3)
-return _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(12, 28),
-Size = UDim2.new(1, -24, 0, 38),
-Text =string.char(48),
-Font = Enum.Font.GothamBold,
-TextSize = 22,
-TextColor3 = _0x832E,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-}, _0xF1F3)
-endlocal _0xC2A6 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 48),
-BackgroundColor3 = _0xF719.green,
-AutoButtonColor = false,
-Text =string.char(83,84,65,82,84,32,70,65,82,77),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 16,
-}, _0xA2C1.pages[1])
-_0x34AC(_0xC2A6, 10)
-local _0x9EA8 = _0xDA08(_0xA2C1.pages[1], 68, _0xF719.text)
-_0x9EA8.Text =string.char(83,116,97,116,117,115,58,32,83,116,111,112,112,101,100)local _0xCFC4 = _0xDA08(_0xA2C1.pages[1], 112, _0xF719.blue)
-_0xCFC4.Text =string.char(80,101,116,115,58,32,78,111,110,101)local _0x2FFE = _0xDA08(_0xA2C1.pages[1], 156, _0xF719.yellow)
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,87,97,105,116,105,110,103)_0xA2C1.t.miniPresents = _0x240D(_0xA2C1.pages[1], 0, 206,string.char(80,82,69,83,69,78,84,83,32,68,69,83,84,82,79,89,69,68), _0xF719.green)
-_0xA2C1.t.miniCycles = _0x240D(_0xA2C1.pages[1], 1, 206,string.char(67,89,67,76,69,83), _0xF719.accent)
-_0xA2C1.t.miniDph = _0x240D(_0xA2C1.pages[1], 2, 206,string.char(68,73,65,77,79,78,68,83,32,47,32,72,79,85,82), _0xF719.blue)_0xA2C1.t.presents = _0x240D(_0xA2C1.pages[2], 0, 10,string.char(80,82,69,83,69,78,84,83,32,68,69,83,84,82,79,89,69,68), _0xF719.green)
-_0xA2C1.t.cycles = _0x240D(_0xA2C1.pages[2], 1, 10,string.char(67,89,67,76,69,83), _0xF719.accent)
-_0xA2C1.t.uptime = _0x240D(_0xA2C1.pages[2], 2, 10,string.char(70,65,82,77,32,84,73,77,69), _0xF719.text)
-_0xA2C1.t.diamonds = _0x240D(_0xA2C1.pages[2], 0, 94,string.char(68,73,65,77,79,78,68,83,32,69,65,82,78,69,68), _0xF719.blue)
-_0xA2C1.t.dph = _0x240D(_0xA2C1.pages[2], 1, 94,string.char(68,73,65,77,79,78,68,83,32,47,32,72,79,85,82), _0xF719.blue)
-_0xA2C1.t.dpc = _0x240D(_0xA2C1.pages[2], 2, 94,string.char(68,73,65,77,79,78,68,83,32,47,32,67,89,67,76,69), _0xF719.blue)
-_0xA2C1.t.potions = _0x240D(_0xA2C1.pages[2], 0, 178,string.char(80,79,84,73,79,78,83,32,71,65,73,78,69,68), _0xF719.accent2)
-_0xA2C1.t.ptph = _0x240D(_0xA2C1.pages[2], 1, 178,string.char(80,79,84,73,79,78,83,32,47,32,72,79,85,82), _0xF719.accent2)
-_0xA2C1.t.pph = _0x240D(_0xA2C1.pages[2], 2, 178,string.char(80,82,69,83,69,78,84,83,32,47,32,72,79,85,82), _0xF719.green)
-_0xA2C1.resetBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 262),
-Size = UDim2.new(1, -24, 0, 38),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(82,69,83,69,84,32,83,84,65,84,83),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[2])
-_0x34AC(_0xA2C1.resetBtn, 9)
-_0x4C8B(_0xA2C1.resetBtn, _0xF719.border, 1)local _0xBC37 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 10),
-Size = UDim2.new(1, -24, 0, 40),
-BackgroundColor3 = Color3.fromRGB(60, 90, 150),
-AutoButtonColor = false,
-Text =string.char(67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xBC37, 9)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 100),
-Size = UDim2.new(1, -28, 0, 40),
-Text =string.char(80,114,101,115,115,32,67,65,76,73,66,82,65,84,69,44,32,116,104,101,110,32,69,81,85,73,80,32,116,104,101,32,100,114,97,103,111,110,32,98,121,32,104,97,110,100,32,97,110,100,32,85,78,69,81,85,73,80,32,105,116,32,98,121,32,104,97,110,100,32,40,107,101,101,112,32,97,32,115,108,111,116,32,102,114,101,101,41,46,32,67,104,101,99,107,32,119,105,116,104,32,84,69,83,84,44,32,116,104,101,110,32,83,84,65,82,84,46,32,83,87,65,80,32,102,108,105,112,115,32,101,113,117,105,112,47,117,110,101,113,117,105,112,32,105,102,32,84,69,83,84,32,115,104,111,119,115,32,116,104,101,32,111,112,112,111,115,105,116,101,46,32,79,114,32,116,121,112,101,32,116,104,101,32,105,110,100,101,120,101,115,32,97,98,111,118,101,32,43,32,65,80,80,76,89,46),
-Font = Enum.Font.Gotham,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-}, _0xA2C1.pages[3])
-_0xA2C1.printKeysBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 150),
-Size = UDim2.new(1, -24, 0, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(80,82,73,78,84,32,83,65,86,69,32,75,69,89,83,32,40,79,117,116,112,117,116,41,32,45,32,104,101,108,112,115,32,102,105,110,100,32,100,105,97,109,111,110,100,115,32,47,32,112,111,116,105,111,110,115),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.printKeysBtn, 9)
-_0x4C8B(_0xA2C1.printKeysBtn, _0xF719.border, 1)
-_0xA2C1.trackInfo = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(14, 194),
-Size = UDim2.new(1, -28, 0, 40),
-Text =string.char(68,105,97,109,111,110,100,115,58,32,110,111,116,32,114,101,97,100,32,121,101,116,32,32,32,124,32,32,32,80,111,116,105,111,110,115,58,32,110,111,116,32,114,101,97,100,32,121,101,116),
-Font = Enum.Font.Gotham,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-}, _0xA2C1.pages[3])
-local _0xB108 = (_0x3152 - 24 - 8) / 2
-_0xA2C1.testBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12, 240),
-Size = UDim2.fromOffset(_0xB108, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(84,69,83,84,32,40,101,113,117,105,112,32,43,32,117,110,101,113,117,105,112,32,100,114,97,103,111,110,41),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.testBtn, 9)
-_0x4C8B(_0xA2C1.testBtn, _0xF719.border, 1)
-_0xA2C1.swapBtn = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Position = UDim2.fromOffset(12 + _0xB108 + 8, 240),
-Size = UDim2.fromOffset(_0xB108, 34),
-BackgroundColor3 = _0xF719.panel,
-AutoButtonColor = false,
-Text =string.char(83,87,65,80,32,101,113,117,105,112,32,60,45,62,32,117,110,101,113,117,105,112),
-TextColor3 = _0xF719.muted,
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xA2C1.swapBtn, 9)
-_0x4C8B(_0xA2C1.swapBtn, _0xF719.border, 1)
-local function _0x0AF0(_0x6FFB)
-_0x9EA8.Text =string.char(83,116,97,116,117,115,58,32).. _0x6FFB
-_0xA2C1.footer.Text = _0x6FFB
-local _0x7F87 = string.lower(_0x6FFB)
-local _0x832E = _0xF719.muted
-if string.find(_0x7F87,string.char(101,114,114,111,114), 1, true)
-or string.find(_0x7F87,string.char(102,97,105,108), 1, true)
-or string.find(_0x7F87,string.char(109,105,115,115,105,110,103), 1, true)
-or string.find(_0x7F87,string.char(110,111,116,32,97,32), 1, true) then
-_0x832E = Color3.fromRGB(235, 87, 87)
-elseif string.find(_0x7F87,string.char(99,97,108,105,98,114,97,116,105,110,103), 1, true)
-or string.find(_0x7F87,string.char(101,113,117,105,112,32,102,111,117,110,100), 1, true)
-or string.find(_0x7F87,string.char(114,101,45,115,101,108,101,99,116), 1, true)
-or string.find(_0x7F87,string.char(115,107,105,112,112,101,100), 1, true)
-or string.find(_0x7F87,string.char(110,111,116,104,105,110,103,32,100,101,116,101,99,116,101,100), 1, true) then
-_0x832E = _0xF719.yellow
-elseif string.find(_0x7F87,string.char(100,101,115,116,114,111,121,101,100), 1, true)
-or string.find(_0x7F87,string.char(114,101,97,100,121), 1, true)
-or string.find(_0x7F87,string.char(99,97,108,105,98,114,97,116,101,100), 1, true)
-or string.find(_0x7F87,string.char(97,112,112,108,105,101,100), 1, true) then
-_0x832E = Color3.fromRGB(46, 204, 113)
-end
-_0xA2C1.footer.TextColor3 = _0x832E
-if _0x452C then
-print(string.char(91,65,85,84,79,32,70,65,82,77,93,32).. _0x6FFB)
-end
-end
-local function _0xE18C(_0x6FFB)
-_0xCFC4.Text =string.char(80,101,116,115,58,32).. _0x6FFB
-if _0x452C then print(string.char(91,65,85,84,79,32,70,65,82,77,32,80,69,84,83,93,32).. _0x6FFB) end
-end
-local function _0x1F4D(...)
-if _0x452C then
-print(string.char(91,65,85,84,79,32,70,65,82,77,32,68,69,66,85,71,93), ...)
-end
-endlocal _0x5FB2 = { [_0xDB8D] = true }
-for _, _0x5966 in ipairs(_0xE3AC) do
-_0x5FB2[_0x5966] = true
-end
-local _0x294D = 0local _0xBB6C = 0
-local _0xF2E5
-local _0xD8BC
-local _0x0483 = false
-local _0x7FAF
-local _0x85EB = false
-local function _0x31ED(remote)
-return tostring(table.find(_0xB9C7:GetChildren(), remote))
-end
-local function _0xFE92(remote, uid)
-if _0x294D == 0 or not _0x5FB2[uid] then return end
-if _0x294D == 1 then
-_0x151D = remote
-_0x294D = 2
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,69,81,85,73,80,32,114,101,109,111,116,101,32,105,110,100,101,120,61).. _0x31ED(remote))
-_0x0AF0(string.char(69,113,117,105,112,32,102,111,117,110,100,32,45,32,110,111,119,32,85,78,69,81,85,73,80,32,116,104,97,116,32,112,101,116,32,98,121,32,104,97,110,100))
-elseif remote ~= _0x151D then
-_0xE941 = remote
-_0x294D = 0
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,85,78,69,81,85,73,80,32,114,101,109,111,116,101,32,105,110,100,101,120,61).. _0x31ED(remote))
-print(string.char(91,67,65,76,73,66,82,65,84,69,93,32,68,79,78,69,32,45,32,101,113,117,105,112,61).. _0x31ED(_0x151D) ..string.char(32,117,110,101,113,117,105,112,61).. _0x31ED(_0xE941)
-..string.char(32,40,111,112,116,105,111,110,97,108,58,32,112,117,116,32,116,104,101,109,32,105,110,32,70,65,76,76,66,65,67,75,95,69,81,85,73,80,95,73,78,68,69,88,32,47,32,70,65,76,76,66,65,67,75,95,85,78,69,81,85,73,80,95,73,78,68,69,88,41))
-_0x0AF0(string.char(67,97,108,105,98,114,97,116,101,100,32,45,32,112,114,101,115,115,32,84,69,83,84,44,32,116,104,101,110,32,83,84,65,82,84))
-end
-end
-local function _0x73D2()
-if _0x0483 then return true end
-if not (hookmetamethod and getnamecallmethod) then return false end
-local _0x8377 = newcclosure or function(_0xF1F3) return _0xF1F3 end
-local _0x57FC = pcall(function()
-_0x7FAF = hookmetamethod(game,string.char(95,95,110,97,109,101,99,97,108,108), _0x8377(function(self, ...)
-if _0x294D == 0 then
-return _0x7FAF(self, ...)
-end
-local _0x3C68 = getnamecallmethod()
-if _0x3C68 ==string.char(73,110,118,111,107,101,83,101,114,118,101,114)and typeof(self) ==string.char(73,110,115,116,97,110,99,101)and self.ClassName ==string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110)then
-local _0x09E5 = ...
-if type(_0x09E5) ==string.char(115,116,114,105,110,103)and _0x5FB2[_0x09E5] then
-task.defer(_0xFE92, self, _0x09E5)
-end
-end
-if setnamecallmethod then
-setnamecallmethod(_0x3C68)
-end
-return _0x7FAF(self, ...)
-end))
-end)
-_0x0483 = _0x57FC
-return _0x57FC
-end
-local function _0x92D1()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,98,101,102,111,114,101,32,99,97,108,105,98,114,97,116,105,110,103))
-return
-end
-if not _0x73D2() then
-_0x0AF0(string.char(72,111,111,107,32,110,111,116,32,115,117,112,112,111,114,116,101,100,32,45,32,117,115,101,32,116,104,101,32,35,32,98,111,120,101,115))
-return
-end
-_0xF2E5 = _0x151D
-_0xD8BC = _0xE941
-_0x151D = nil
-_0xE941 = nil
-_0x294D = 1
-_0xBB6C = _0xBB6C + 1
-local _0x5D12 = _0xBB6C
-_0x0AF0(string.char(67,97,108,105,98,114,97,116,105,110,103,32,45,32,69,81,85,73,80,32,116,104,101,32,100,114,97,103,111,110,32,98,121,32,104,97,110,100,44,32,116,104,101,110,32,85,78,69,81,85,73,80,32,105,116))
-task.delay(60, function()
-if _0xBB6C == _0x5D12 and _0x294D ~= 0 then
-_0x294D = 0
-_0x151D = _0xF2E5
-_0xE941 = _0xD8BC
-_0x0AF0(string.char(78,111,116,104,105,110,103,32,100,101,116,101,99,116,101,100,32,45,32,111,108,100,32,114,101,109,111,116,101,115,32,107,101,112,116,32,40,101,113,117,105,112,32,97,110,100,32,117,110,101,113,117,105,112,32,110,101,101,100,32,100,105,102,102,101,114,101,110,116,32,114,101,109,111,116,101,115,41))
-end
-end)
-end
-_0xBC37.MouseButton1Click:Connect(function()
-local _0x57FC, _0x39BE = pcall(_0x92D1)
-if not _0x57FC then
-_0x294D = 0
-_0x151D = _0xF2E5
-_0xE941 = _0xD8BC
-warn(string.char(91,67,65,76,73,66,82,65,84,69,32,69,82,82,79,82,93), _0x39BE)
-_0x0AF0(string.char(69,82,82,79,82,32,105,110,32,99,97,108,105,98,114,97,116,101,58,32).. tostring(_0x39BE))
-end
-end)_0xA2C1.testBtn.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-if _0x294D ~= 0 then
-_0x0AF0(string.char(70,105,110,105,115,104,32,99,97,108,105,98,114,97,116,105,111,110,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-if _0x85EB then return end
-_0x85EB = true
-task.spawn(function()
-_0x0AF0(string.char(84,101,115,116,58,32,101,113,117,105,112,112,105,110,103,32,116,104,101,32,100,114,97,103,111,110,46,46,46))
-local _0x66AB, _0x8149 = pcall(function()
-return _0x151D:InvokeServer(_0xDB8D)
-end)
-print(string.char(91,84,69,83,84,93,32,101,113,117,105,112,32,45,62), _0x66AB, _0x8149)
-task.wait(3)
-_0x0AF0(string.char(84,101,115,116,58,32,117,110,101,113,117,105,112,112,105,110,103,32,116,104,101,32,100,114,97,103,111,110,46,46,46))
-local _0x4CD8, _0x9597 = pcall(function()
-return _0xE941:InvokeServer(_0xDB8D)
-end)
-print(string.char(91,84,69,83,84,93,32,117,110,101,113,117,105,112,32,45,62), _0x4CD8, _0x9597)
-task.wait(1)
-if _0x66AB and _0x4CD8 then
-_0x0AF0(string.char(84,101,115,116,32,100,111,110,101,32,45,32,100,114,97,103,111,110,32,115,104,111,117,108,100,32,104,97,118,101,32,97,112,112,101,97,114,101,100,32,116,104,101,110,32,118,97,110,105,115,104,101,100,59,32,105,102,32,110,111,116,44,32,112,114,101,115,115,32,83,87,65,80))
-else
-_0x0AF0(string.char(84,101,115,116,32,101,114,114,111,114,32,45,32,115,101,101,32,79,117,116,112,117,116,32,40,70,57,41,59,32,116,114,121,32,83,87,65,80,32,111,114,32,67,65,76,73,66,82,65,84,69,32,97,103,97,105,110))
-end
-_0x85EB = false
-end)
-end)_0xA2C1.swapBtn.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-_0x151D, _0xE941 = _0xE941, _0x151D
-print(string.char(91,83,87,65,80,93,32,101,113,117,105,112,32,105,110,100,101,120,61).. _0x31ED(_0x151D) ..string.char(32,117,110,101,113,117,105,112,32,105,110,100,101,120,61).. _0x31ED(_0xE941))
-_0x0AF0(string.char(83,119,97,112,112,101,100,32,45,32,114,117,110,32,84,69,83,84,32,97,103,97,105,110))
-end)local function _0xB420(placeholder, x)
-local _0xF1F3 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(150, 34),
-Position = UDim2.fromOffset(x, 60),
-BackgroundColor3 = Color3.fromRGB(30, 34, 46),
-BorderSizePixel = 0,
-}, _0xA2C1.pages[3])
-_0x34AC(_0xF1F3, 7)
-return _0x6442(string.char(84,101,120,116,66,111,120), {
-Size = UDim2.new(1, -10, 1, 0),
-Position = UDim2.fromOffset(5, 0),
-BackgroundTransparency = 1,
-Text ="",
-PlaceholderText = placeholder,
-PlaceholderColor3 = Color3.fromRGB(130, 138, 160),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-ClearTextOnFocus = false,
-}, _0xF1F3)
-end
-local _0xA3E8 = _0xB420(string.char(69,113,117,105,112,32,35), 12)
-local _0x0E56 = _0xB420(string.char(85,110,101,113,117,105,112,32,35), 170)
-local _0x9807 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.new(1, -340, 0, 34),
-Position = UDim2.fromOffset(328, 60),
-BackgroundColor3 = Color3.fromRGB(35, 155, 90),
-Text =string.char(65,80,80,76,89),
-TextColor3 = Color3.new(1, 1, 1),
-Font = Enum.Font.GothamBold,
-TextSize = 12,
-}, _0xA2C1.pages[3])
-_0x34AC(_0x9807, 7)
-_0x9807.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x0AF0(string.char(83,116,111,112,32,116,104,101,32,102,97,114,109,32,102,105,114,115,116))
-return
-end
-local _0xE17D = tonumber(_0xA3E8.Text)
-local _0xE401 = tonumber(_0x0E56.Text)
-if not _0xE17D or not _0xE401 then
-_0x0AF0(string.char(84,121,112,101,32,98,111,116,104,32,105,110,100,101,120,32,110,117,109,98,101,114,115))
-return
-end
-local _0xD8E2 = _0xB9C7:GetChildren()
-local _0xC61A = _0xD8E2[_0xE17D]
-local _0x8899 = _0xD8E2[_0xE401]
-if not (_0xC61A and _0xC61A:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110))) then
-_0x0AF0(string.char(35).. _0xE17D ..string.char(32,105,115,32,110,111,116,32,97,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110))
-return
-end
-if not (_0x8899 and _0x8899:IsA(string.char(82,101,109,111,116,101,70,117,110,99,116,105,111,110))) then
-_0x0AF0(string.char(35).. _0xE401 ..string.char(32,105,115,32,110,111,116,32,97,32,82,101,109,111,116,101,70,117,110,99,116,105,111,110))
-return
-end
-_0x151D = _0xC61A
-_0xE941 = _0x8899
-_0x294D = 0
-_0xBB6C = _0xBB6C + 1
-_0x0AF0(string.char(73,110,100,101,120,101,115,32,97,112,112,108,105,101,100,32,45,32,112,114,101,115,115,32,83,84,65,82,84))
-end)local _0xB4BD = false
-local _0xB773
-local _0xEB13
-_0x01CA.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-_0xB4BD = true
-_0xB773 = input.Position
-_0xEB13 = _0xBB10.Position
-end
-end)
-_0x2699.InputChanged:Connect(function(input)
-if _0xB4BD
-and (input.UserInputType == Enum.UserInputType.MouseMovement
-or input.UserInputType == Enum.UserInputType.Touch) then
-local _0xB441 = input.Position - _0xB773
-_0xBB10.Position = UDim2.new(
-_0xEB13.X.Scale,
-_0xEB13.X.Offset + _0xB441.X,
-_0xEB13.Y.Scale,
-_0xEB13.Y.Offset + _0xB441.Y
-)
-end
-end)
-_0x2699.InputEnded:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch then
-_0xB4BD = false
-end
-end)local _0x1DC1 = {
-_0x9713 = 0,
-cycles = 0,
-diamonds = 0,
-potions = 0,
-seconds = 0,hasDiamonds = nil,hasPotions = nil,
-lastDiamonds = nil,
-lastPotions = nil,
-potionsKey = nil,
-}
-local function _0x3AFD(_0xC81D)
-if _0xC81D >= 1e9 then
-return string.format(string.char(37,46,50,102,66), _0xC81D / 1e9)
-elseif _0xC81D >= 1e6 then
-return string.format(string.char(37,46,50,102,77), _0xC81D / 1e6)
-elseif _0xC81D >= 1e3 then
-return string.format(string.char(37,46,49,102,75), _0xC81D / 1e3)
-elseif _0xC81D == math.floor(_0xC81D) then
-return string.format(string.char(37,100), _0xC81D)
-end
-return string.format(string.char(37,46,49,102), _0xC81D)
-end
-local function _0xFEEA(sec)
-sec = math.floor(sec)
-return string.format(string.char(37,48,50,100,58,37,48,50,100,58,37,48,50,100), sec // 3600, (sec % 3600) // 60, sec % 60)
-end
-local function _0x2657(label, text)
-if label.Text ~= text then
-label.Text = text
-end
-end
-local function _0x0D1E(amount, available, decimals)
-if available == false then returnstring.char(78,47,65)end
-if _0x1DC1.seconds < 15 then returnstring.char(46,46,46)end
-local _0x30CA = amount / (_0x1DC1.seconds / 3600)
-if decimals then
-return string.format(string.char(37,46).. decimals ..string.char(102), _0x30CA)
-end
-return _0x3AFD(_0x30CA)
-end
-local function _0x51DA()
-local _0x5EC9 = _0xA2C1.t
-local _0x827F = (_0x1DC1.hasDiamonds == false) andstring.char(78,47,65)or _0x3AFD(_0x1DC1.diamonds)
-local _0x0823 = (_0x1DC1.hasPotions == false) andstring.char(78,47,65)or _0x3AFD(_0x1DC1.potions)
-local _0x2988 = _0x0D1E(_0x1DC1.diamonds, _0x1DC1.hasDiamonds)
-local _0x8B11 =string.char(45)if _0x1DC1.hasDiamonds == false then
-_0x8B11 =string.char(78,47,65)elseif _0x1DC1.cycles > 0 then
-_0x8B11 = _0x3AFD(_0x1DC1.diamonds / _0x1DC1.cycles)
-end
-_0x2657(_0x5EC9.presents, tostring(_0x1DC1.presents))
-_0x2657(_0x5EC9.cycles, tostring(_0x1DC1.cycles))
-_0x2657(_0x5EC9.uptime, _0xFEEA(_0x1DC1.seconds))
-_0x2657(_0x5EC9.diamonds, _0x827F)
-_0x2657(_0x5EC9.dph, _0x2988)
-_0x2657(_0x5EC9.dpc, _0x8B11)
-_0x2657(_0x5EC9.potions, _0x0823)
-_0x2657(_0x5EC9.ptph, _0x0D1E(_0x1DC1.potions, _0x1DC1.hasPotions))
-_0x2657(_0x5EC9.pph, _0x0D1E(_0x1DC1.presents, true, 1))
-_0x2657(_0x5EC9.miniPresents, tostring(_0x1DC1.presents))
-_0x2657(_0x5EC9.miniCycles, tostring(_0x1DC1.cycles))
-_0x2657(_0x5EC9.miniDph, _0x2988)
-local _0x69BC = (_0x1DC1.hasDiamonds == nil) andstring.char(110,111,116,32,114,101,97,100,32,121,101,116)or (_0x1DC1.hasDiamonds andstring.char(102,111,117,110,100)orstring.char(78,79,84,32,70,79,85,78,68))
-local _0xFED4 = (_0x1DC1.hasPotions == nil) andstring.char(110,111,116,32,114,101,97,100,32,121,101,116)or (_0x1DC1.hasPotions and (string.char(102,111,117,110,100,32,40).. tostring(_0x1DC1.potionsKey or _0x7BAD) ..string.char(41)) orstring.char(78,79,84,32,70,79,85,78,68))
-_0x2657(_0xA2C1.trackInfo,string.char(68,105,97,109,111,110,100,115,58,32).. _0x69BC ..string.char(32,32,32,124,32,32,32,80,111,116,105,111,110,115,58,32).. _0xFED4)
-endlocal function _0x42FB()
-local _0x57FC, _0x05CB = pcall(function()
-return _0x7702.Save.Get()
-end)
-if _0x57FC and type(_0x05CB) ==string.char(116,97,98,108,101)then
-return _0x05CB
-end
-return nil
-end
-local function _0x9072(v)
-if type(v) ==string.char(110,117,109,98,101,114)then
-return v
-end
-if type(v) ~=string.char(116,97,98,108,101)then
-return nil
-end
-local _0x5FFD = 0
-for _, item in pairs(v) do
-if type(item) ==string.char(110,117,109,98,101,114)then
-_0x5FFD = _0x5FFD + item
-elseif type(item) ==string.char(116,97,98,108,101)then
-_0x5FFD = _0x5FFD + (tonumber(item._am) or tonumber(item.Amount) or tonumber(item.amount) or tonumber(item.Count) or 1)
-else
-_0x5FFD = _0x5FFD + 1
-end
-end
-return _0x5FFD
-end
-local function _0x7E49(_0x05CB)
-if _0x05CB and type(_0x05CB[_0x80D2]) ==string.char(110,117,109,98,101,114)then
-return _0x05CB[_0x80D2]
-endlocal _0x57FC, _0x6FFB = pcall(function()
-local _0xACBB = _0x9C17:FindFirstChild(string.char(108,101,97,100,101,114,115,116,97,116,115))
-if not _0xACBB then return nil end
-for _, child in ipairs(_0xACBB:GetChildren()) do
-if string.find(string.lower(child.Name),string.char(100,105,97,109,111,110,100), 1, true)
-and type(child.Value) ==string.char(110,117,109,98,101,114)then
-return child.Value
-end
-end
-return nil
-end)
-if _0x57FC then
-return _0x6FFB
-end
-return nil
-end
-local function _0xAEC6(_0x05CB)
-if not _0x05CB then return nil end
-local _0x7081 = _0x7BAD or _0x1DC1.potionsKey
-if not _0x7081 then
-for k, v in pairs(_0x05CB) do
-if type(k) ==string.char(115,116,114,105,110,103)and string.find(string.lower(k),string.char(112,111,116,105,111,110), 1, true)
-and (type(v) ==string.char(116,97,98,108,101)or type(v) ==string.char(110,117,109,98,101,114)) then
-_0x7081 = k
-_0x1DC1.potionsKey = k
-break
-end
-end
-end
-if _0x7081 then
-return _0x9072(_0x05CB[_0x7081])
-end
-return nil
-endlocal function _0x041C(_0xD6CF)
-if not _0x1DBD then
-_0x1DC1.lastDiamonds = nil
-_0x1DC1.lastPotions = nil
-return
-end
-_0x1DC1.seconds = _0x1DC1.seconds + _0xD6CF
-local _0x05CB = _0x42FB()
-local _0x42EE = _0x7E49(_0x05CB)
-_0x1DC1.hasDiamonds = (_0x42EE ~= nil)
-if _0x42EE then
-if _0x1DC1.lastDiamonds and _0x42EE > _0x1DC1.lastDiamonds then
-_0x1DC1.diamonds = _0x1DC1.diamonds + (_0x42EE - _0x1DC1.lastDiamonds)
-end
-_0x1DC1.lastDiamonds = _0x42EE
-end
-local _0x88C6 = _0xAEC6(_0x05CB)
-_0x1DC1.hasPotions = (_0x88C6 ~= nil)
-if _0x88C6 then
-if _0x1DC1.lastPotions and _0x88C6 > _0x1DC1.lastPotions then
-_0x1DC1.potions = _0x1DC1.potions + (_0x88C6 - _0x1DC1.lastPotions)
-end
-_0x1DC1.lastPotions = _0x88C6
-end
-end
-local function _0x8D11(label, size)
-label.TextSize = size + 6
-_0x443A(label, 0.3, { TextSize = size })
-end
-local function _0xC65D()
-_0x1DC1.presents = _0x1DC1.presents + 1
-_0x51DA()
-_0x8D11(_0xA2C1.t.presents, 22)
-_0x8D11(_0xA2C1.t.miniPresents, 22)
-end
-local function _0xAB6B()
-_0x1DC1.cycles = _0x1DC1.cycles + 1
-_0x51DA()
-_0x8D11(_0xA2C1.t.cycles, 22)
-_0x8D11(_0xA2C1.t.miniCycles, 22)
-end
-_0xA2C1.resetBtn.MouseButton1Click:Connect(function()
-_0x1DC1.presents = 0
-_0x1DC1.cycles = 0
-_0x1DC1.diamonds = 0
-_0x1DC1.potions = 0
-_0x1DC1.seconds = 0
-_0x1DC1.lastDiamonds = nil
-_0x1DC1.lastPotions = nil
-_0x51DA()
-_0x0AF0(string.char(83,116,97,116,115,32,114,101,115,101,116))
-end)
-_0xA2C1.printKeysBtn.MouseButton1Click:Connect(function()
-local _0x05CB = _0x42FB()
-if not _0x05CB then
-_0x0AF0(string.char(83,97,118,101,32,100,97,116,97,32,110,111,116,32,97,118,97,105,108,97,98,108,101,32,40,76,105,98,114,97,114,121,46,83,97,118,101,46,71,101,116,41))
-return
-end
-print(string.char(91,83,84,65,84,83,93,32,45,45,45,45,32,116,111,112,45,108,101,118,101,108,32,107,101,121,115,32,111,102,32,121,111,117,114,32,115,97,118,101,32,45,45,45,45))
-for k, v in pairs(_0x05CB) do
-local _0x488A = type(v)
-if type(v) ==string.char(116,97,98,108,101)then
-local _0xC81D = 0
-for _ in pairs(v) do
-_0xC81D = _0xC81D + 1
-end
-_0x488A =string.char(116,97,98,108,101,32,40).. _0xC81D ..string.char(32,101,110,116,114,105,101,115,41)elseif type(v) ==string.char(110,117,109,98,101,114)then
-_0x488A =string.char(110,117,109,98,101,114,32,61,32).. tostring(v)
-end
-print(string.char(91,83,84,65,84,83,93), tostring(k), _0x488A)
-end
-for _, k in ipairs({string.char(66,111,111,115,116,115,73,110,118,101,110,116,111,114,121),string.char(66,111,111,115,116,115)}) do
-print(string.char(91,83,84,65,84,83,93,32,45,45,45,45,32).. k ..string.char(32,45,45,45,45))
-if type(_0x05CB[k]) ==string.char(116,97,98,108,101)then
-for a, b in pairs(_0x05CB[k]) do
-local _0x0EFE = tostring(b)
-if type(b) ==string.char(116,97,98,108,101)then
-local _0x8C0A = {}
-for kk, vv in pairs(b) do
-table.insert(_0x8C0A, tostring(kk) ..string.char(61).. tostring(vv))
-end
-_0x0EFE =string.char(123).. table.concat(_0x8C0A,string.char(44,32)) ..string.char(125)end
-print(string.char(91,83,84,65,84,83,93), tostring(a), _0x0EFE)
-end
-end
-end
-_0x0AF0(string.char(83,97,118,101,32,107,101,121,115,32,112,114,105,110,116,101,100,32,105,110,32,79,117,116,112,117,116,32,40,70,57,41))
-end)
-task.spawn(function()
-local _0x0F80 = os.clock()
-while _0x38D3.Parent do
-task.wait(1)
-local _0x1F57 = os.clock()
-local _0xD6CF = _0x1F57 - _0x0F80
-_0x0F80 = _0x1F57
-pcall(_0x041C, _0xD6CF)
-pcall(_0x51DA)
-end
-end)
-_0x51DA()task.spawn(function()
-while _0x38D3.Parent do
-_0xA2C1.dot.BackgroundColor3 = _0x1DBD and Color3.fromRGB(46, 204, 113) or _0xF719.muted
-task.wait(0.5)
-end
-end)local function _0xB9F8(remote, petId, quiet)
-if not _0x1DBD then return false end
-if not remote then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,82,101,109,111,116,101,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,82,69,77,79,84,69,83))
-return false
-end
-local _0x57FC, _0x83A2 = pcall(function()
-return remote:InvokeServer(petId)
-end)
-if not _0x57FC then
-if not quiet then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,82,101,109,111,116,101,32,101,114,114,111,114,58), _0x83A2)
-end
-return false
-end
-if _0x83A2 == false then
-if not quiet then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,80,101,116,32,97,99,116,105,111,110,32,114,101,106,101,99,116,101,100,58), petId)
-end
-return false
-end
-return true
-endlocal function _0x5779(_0x5966)
-local _0x05CB = _0x42FB()
-if _0x05CB and type(_0x05CB.PetsEquipped) ==string.char(116,97,98,108,101)then
-return _0x05CB.PetsEquipped[_0x5966] ~= nil
-end
-return nil
-end
-local function _0x2213(_0x5966)
-if not _0x1DBD then return false end
-if _0xB9F8(_0x151D, _0x5966) then
-return true
-endreturn _0x5779(_0x5966) == true
-endlocal function _0x1869(_0x5966)
-return _0xB9F8(_0xE941, _0x5966, true)
-end
-local function _0x4F48()
-local _0x5BDE = 0
-for i, _0x5966 in ipairs(_0xE3AC) do
-if not _0x1DBD then return false end
-_0xE18C(string.char(69,113,117,105,112,112,105,110,103,32).. i ..string.char(47).. #_0xE3AC)
-if _0x2213(_0x5966) then
-_0x5BDE = _0x5BDE + 1
-else
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,67,111,117,108,100,32,110,111,116,32,101,113,117,105,112,32,115,109,97,108,108,32,112,101,116), i, _0x5966)
-end
-task.wait(0.15)
-end
-if _0x5BDE == 0 then
-return false
-endtask.wait(2)
-_0xE18C(_0x5BDE ..string.char(32,115,109,97,108,108,32,112,101,116,115,32,101,113,117,105,112,112,101,100))
-return _0x1DBD
-end
-local function _0xBDCB()
-for i, _0x5966 in ipairs(_0xE3AC) do
-if not _0x1DBD then return false end
-_0xE18C(string.char(85,110,101,113,117,105,112,112,105,110,103,32).. i ..string.char(47).. #_0xE3AC)
-_0x1869(_0x5966)
-task.wait(0.15)
-end
-return true
-endlocal function _0xAF6A(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return nil end
-local _0x6B2A = _0x7508:GetAttribute(string.char(72,101,97,108,116,104))
-if typeof(_0x6B2A) ==string.char(110,117,109,98,101,114)then
-return _0x6B2A
-end
-return nil
-end
-local function _0xFF79()
-local _0xC2CC = _0x9C17.Character
-return _0xC2CC and _0xC2CC:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))
-end
-local function _0x6557(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return nil end
-if _0x7508:IsA(string.char(80,86,73,110,115,116,97,110,99,101)) then
-local _0x57FC, _0xFFCD = pcall(function()
-return _0x7508:GetPivot()
-end)
-if _0x57FC and _0xFFCD then
-return _0xFFCD.Position
-end
-end
-for _, _0x42EE in ipairs(_0x7508:GetDescendants()) do
-if _0x42EE:IsA(string.char(66,97,115,101,80,97,114,116)) then
-return _0x42EE.Position
-end
-end
-return nil
-end
-local function _0x14C8(_0x7508)
-local _0x3FD9 = _0xFF79()
-local _0x3873 = _0x6557(_0x7508)
-if _0x3FD9 and _0x3873 then
-return (_0x3FD9.Position - _0x3873).Magnitude
-end
-return nil
-endlocal function _0x935C(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return false end
-local _0x57FC, _0x39BE = pcall(function()
-_0x7702.Signal.Fire(string.char(83,101,108,101,99,116,32,67,111,105,110), _0x7508)
-end)
-if not _0x57FC then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,83,101,108,101,99,116,32,101,114,114,111,114,58), _0x39BE)
-return false
-end
-return true
-end
-local function _0x7409(_0xB237)
-local _0xAE01
-local _0x5F24 = math.huge
-for _, _0x7508 in ipairs(_0xE0E9:GetChildren()) do
-if not _0xB237[_0x7508] then
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A and _0x6B2A > _0x75D4 then
-local _0xE4CC = math.abs(_0x6B2A - _0x4B4F)
-if _0xE4CC <= _0xD9D8
-and _0xE4CC < _0x5F24 then
-_0xAE01 = _0x7508
-_0x5F24 = _0xE4CC
-end
-end
-end
-end
-return _0xAE01
-endlocal function _0xC736(_0xB237)
-local _0xAE01
-local _0x33DE = math.huge
-for _, _0x7508 in ipairs(_0xE0E9:GetChildren()) do
-if not _0xB237[_0x7508] then
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A and _0x6B2A > 0 and _0x6B2A < _0x75D4 then
-local _0x5792 = _0x9713[_0x7508] == true
-local _0x8D1A = _0x14C8(_0x7508) or 0
-if _0x5792 or _0x8D1A <= _0x7914 then
-local _0xCD44 = _0x8D1A
-if _0x5792 then
-_0xCD44 = _0xCD44 - 1000000
-end
-if _0xCD44 < _0x33DE then
-_0xAE01 = _0x7508
-_0x33DE = _0xCD44
-end
-end
-end
-end
-end
-return _0xAE01
-endlocal function _0x423D()
-_0x0AF0(string.char(80,114,101,112,97,114,105,110,103,32,68,114,97,103,111,110))for _0x7508 in pairs(_0x9713) do
-if not _0x7508.Parent then
-_0x9713[_0x7508] = nil
-end
-end
-if not _0xBDCB() then
-return false
-end
-if not _0x1DBD then return false end
-_0xE18C(string.char(69,109,112,121,114,101,97,110,32,68,114,97,103,111,110))
-if not _0x2213(_0xDB8D) then
-_0x0AF0(string.char(68,114,97,103,111,110,32,101,113,117,105,112,32,102,97,105,108,101,100,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,97,103,97,105,110))
-return false
-end
-task.wait(0.5)
-local _0xB237 = {}
-while _0x1DBD do
-local _0x7508 = _0x7409(_0xB237)
-if not _0x7508 then
-break
-end
-_0x0AF0(string.char(68,114,97,103,111,110,32,97,116,116,97,99,107,105,110,103,32).. _0x7508.Name)
-if not _0x935C(_0x7508) then
-_0xB237[_0x7508] = true
-task.wait(0.5)
-continue
-end
-local _0x41A7 = false
-local _0x5544 = nil
-local _0xCA56 = os.clock()
-local _0x013F = 0
-while _0x1DBD and _0x7508.Parent do
-local _0x6B2A = _0xAF6A(_0x7508)
-if _0x6B2A then
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32).. string.format(string.char(37,46,48,102), _0x6B2A)
-if _0x6B2A <= _0x75D4 then
-_0x41A7 = true
-break
-end
-if not _0x5544 or _0x6B2A < _0x5544 then
-_0x5544 = _0x6B2A
-_0xCA56 = os.clock()
-_0x013F = 0
-end
-endif os.clock() - _0xCA56 >= _0xA1AA then
-if _0x013F >= _0x9C53 then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,68,114,97,103,111,110,32,105,115,32,110,111,116,32,100,97,109,97,103,105,110,103), _0x7508.Name,string.char(45,32,115,107,105,112,112,105,110,103))
-break
-end
-_0x013F = _0x013F + 1
-_0x0AF0(string.char(82,101,45,115,101,108,101,99,116,105,110,103,32).. _0x7508.Name ..string.char(32,40).. _0x013F ..string.char(47).. _0x9C53 ..string.char(41))
-_0x935C(_0x7508)
-_0xCA56 = os.clock()
-end
-task.wait(0.25)
-end
-if _0x41A7 then
-_0x9713[_0x7508] = true
-_0xB237[_0x7508] = true
-_0x1F4D(string.char(80,114,101,115,101,110,116,32,114,101,97,100,121,32,102,111,114,32,115,109,97,108,108,32,112,101,116,115,58), _0x7508.Name)
-else_0xB237[_0x7508] = true
-if _0x7508.Parent then
-task.wait(0.5)
-end
-end
-end
-return _0x1DBD
-endlocal function _0x280C(_0x7508)
-if not _0x7508 or not _0x7508.Parent then return true end
-local _0x6B2A = _0xAF6A(_0x7508)
-if not _0x6B2A or _0x6B2A <= 0 then return true end
-if _0x6B2A >= _0x75D4 then return false end
-_0x0AF0(string.char(83,109,97,108,108,32,112,101,116,115,32,116,97,114,103,101,116,105,110,103,32).. _0x7508.Name)
-_0xE18C(#_0xE3AC ..string.char(32,115,109,97,108,108,32,112,101,116,115,32,97,116,116,97,99,107,105,110,103))
-_0x1F4D(string.char(84,97,114,103,101,116), _0x7508.Name,string.char(72,80), _0x6B2A,string.char(68,105,115,116,97,110,99,101), _0x14C8(_0x7508))
-_0x935C(_0x7508)
-local _0x27E4 = _0x6B2A
-local _0xCA56 = os.clock()
-local _0x013F = 0
-while _0x1DBD and _0x7508.Parent do
-task.wait(0.25)
-_0x6B2A = _0xAF6A(_0x7508)
-if not _0x6B2A or _0x6B2A <= 0 then
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,68,101,115,116,114,111,121,101,100)return true
-end
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32).. string.format(string.char(37,46,48,102), _0x6B2A)
-if _0x6B2A < _0x27E4 then
-_0x27E4 = _0x6B2A
-_0xCA56 = os.clock()
-_0x013F = 0
-endif os.clock() - _0xCA56 >= _0x6944 then
-if _0x013F >= _0x9C53 then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,93,32,80,101,116,115,32,97,114,101,32,110,111,116,32,100,97,109,97,103,105,110,103), _0x7508.Name,string.char(45,32,115,107,105,112,112,105,110,103))
-return false
-end
-_0x013F = _0x013F + 1
-_0x0AF0(string.char(82,101,45,115,101,108,101,99,116,105,110,103,32).. _0x7508.Name ..string.char(32,40).. _0x013F ..string.char(47).. _0x9C53 ..string.char(41))
-_0x935C(_0x7508)
-_0xCA56 = os.clock()
-end
-end
-return not _0x7508.Parent
-end
-local function _0xE20C()
-_0x0AF0(string.char(83,119,105,116,99,104,105,110,103,32,116,111,32,115,109,97,108,108,32,112,101,116,115))
-_0xE18C(string.char(85,110,101,113,117,105,112,112,105,110,103,32,100,114,97,103,111,110))
-_0x1869(_0xDB8D)
-if not _0x1DBD then return false end
-if not _0x4F48() then
-return false
-end
-local _0xB237 = {}
-while _0x1DBD do
-local _0x7508 = _0xC736(_0xB237)
-if not _0x7508 then
-break
-end
-local _0x7A23 = _0x280C(_0x7508)
-if not _0x1DBD then return false end_0xB237[_0x7508] = true
-if _0x7A23 or not _0x7508.Parent then
-_0xC65D()
-_0x0AF0(string.char(80,114,101,115,101,110,116,32,100,101,115,116,114,111,121,101,100))
-else
-_0x0AF0(string.char(83,107,105,112,112,101,100,32).. _0x7508.Name)
-task.wait(0.5)
-end
-end
-return _0x1DBD
-endlocal function _0x91D7()
-if _0x6625 then return end
-_0x6625 = true
-while _0x1DBD do
-_0x0AF0(string.char(83,116,97,114,116,105,110,103,32,68,114,97,103,111,110,32,112,104,97,115,101))
-if not _0x423D() then
-if not _0x1DBD then break end
-_0x0AF0(string.char(68,114,97,103,111,110,32,112,104,97,115,101,32,114,101,116,114,121))
-task.wait(1)
-continue
-end
-if not _0x1DBD then break end
-if not _0xE20C() then
-if not _0x1DBD then break end
-_0x0AF0(string.char(83,109,97,108,108,32,112,101,116,115,32,112,104,97,115,101,32,114,101,116,114,121))
-task.wait(1)
-continue
-end
-if not _0x1DBD then break end
-_0x0AF0(string.char(65,108,108,32,112,114,101,115,101,110,116,115,32,100,101,115,116,114,111,121,101,100))
-_0xBDCB()
-if not _0x1DBD then break end
-_0xAB6B()
-_0x0AF0(string.char(80,114,101,112,97,114,105,110,103,32,110,101,120,116,32,68,114,97,103,111,110,32,99,121,99,108,101))
-task.wait(0.5)
-end
-_0x6625 = false
-_0x1DBD = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(83,116,111,112,112,101,100))
-_0xE18C(string.char(78,111,110,101))
-_0x2FFE.Text =string.char(80,114,101,115,101,110,116,32,72,80,58,32,87,97,105,116,105,110,103)end_0xC2A6.MouseButton1Click:Connect(function()
-if _0x1DBD then
-_0x1DBD = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(83,116,111,112,112,105,110,103,46,46,46))
-else
-if _0x294D ~= 0 then
-_0x0AF0(string.char(70,105,110,105,115,104,32,99,97,108,105,98,114,97,116,105,111,110,32,102,105,114,115,116))
-return
-end
-if not (_0x151D and _0xE941) then
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69))
-return
-end
-_0x1DBD = true
-_0xC2A6.Text =string.char(83,84,79,80,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(180, 55, 65)
-_0x0AF0(string.char(83,116,97,114,116,105,110,103,46,46,46))
-task.spawn(function()
-local _0x57FC, _0x39BE = pcall(_0x91D7)
-if not _0x57FC then
-warn(string.char(91,65,85,84,79,32,70,65,82,77,32,67,82,65,83,72,93), _0x39BE)
-_0x1DBD = false
-_0x6625 = false
-_0xC2A6.Text =string.char(83,84,65,82,84,32,70,65,82,77)_0xC2A6.BackgroundColor3 = Color3.fromRGB(35, 155, 90)
-_0x0AF0(string.char(69,82,82,79,82,32,45,32,99,104,101,99,107,32,79,117,116,112,117,116))
-end
-end)
-end
-end)
-_0x5773.MouseButton1Click:Connect(function()
-_0x1DBD = false
-_0x38D3:Destroy()
-end)
-if _0x151D and _0xE941 then
-_0x0AF0(string.char(82,101,97,100,121))
-else
-_0x0AF0(string.char(82,101,109,111,116,101,115,32,109,105,115,115,105,110,103,32,45,32,112,114,101,115,115,32,67,65,76,73,66,82,65,84,69,32,111,114,32,116,121,112,101,32,116,104,101,32,35,32,98,111,120,101,115))
-end
-endlocal function _0x2C5D()
-local _0x57FC, _0x5966 = pcall(function()
-if gethwid then
-return gethwid()
-end
-return nil
-end)
-if _0x57FC and type(_0x5966) ==string.char(115,116,114,105,110,103)and #_0x5966 > 0 then
-return _0x5966
-end
-local _0x4CD8, _0xF08E = pcall(function()
-return game:GetService(string.char(82,98,120,65,110,97,108,121,116,105,99,115,83,101,114,118,105,99,101)):GetClientId()
-end)
-if _0x4CD8 and type(_0xF08E) ==string.char(115,116,114,105,110,103)and #_0xF08E > 0 then
-return _0xF08E
-end
-return nil
-end
-local _0xD2CF = _0x2C5D()local _0xF719 = {
-bg = Color3.fromRGB(14, 16, 24),
-title = Color3.fromRGB(19, 22, 33),
-panel = Color3.fromRGB(24, 28, 41),
-border = Color3.fromRGB(42, 48, 68),
-text = Color3.fromRGB(235, 238, 246),
-muted = Color3.fromRGB(135, 144, 168),
-accent = Color3.fromRGB(86, 128, 255),
-accent2 = Color3.fromRGB(155, 92, 255),
-green = Color3.fromRGB(40, 190, 120),
-red = Color3.fromRGB(226, 78, 90),
-yellow = Color3.fromRGB(255, 196, 90),
-}
-local function _0x6442(class, props, parent)
-local _0x8C8D = Instance.new(class)
-for k, v in pairs(props) do
-_0x8C8D[k] = v
-end
-_0x8C8D.Parent = parent
-return _0x8C8D
-end
-local function _0x34AC(_0x8C8D, radius)
-local _0x15E8 = Instance.new(string.char(85,73,67,111,114,110,101,114))
-_0x15E8.CornerRadius = UDim.new(0, radius)
-_0x15E8.Parent = _0x8C8D
-return _0x15E8
-end
-local function _0x4C8B(_0x8C8D, _0x832E, thickness)
-local _0xD5C8 = Instance.new(string.char(85,73,83,116,114,111,107,101))
-_0xD5C8.Color = _0x832E
-_0xD5C8.Thickness = thickness
-_0xD5C8.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-_0xD5C8.Parent = _0x8C8D
-return _0xD5C8
-end
-local function _0x443A(_0x8C8D, time, props)
-_0x4207:Create(
-_0x8C8D,
-TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-props
-):Play()
-end
-local function _0xFC6A()
-local _0x57FC, _0xA2C1 = pcall(function()
-return gethui and gethui()
-end)
-if _0x57FC and _0xA2C1 then
-return _0xA2C1
-end
-return _0x9C17:WaitForChild(string.char(80,108,97,121,101,114,71,117,105))
-endlocal _0xA20A = _0xFC6A()
-local _0x177D = _0xA20A:FindFirstChild(string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,76,111,97,100,101,114))
-if _0x177D then
-_0x177D:Destroy()
-end
-local _0x38D3 = _0x6442(string.char(83,99,114,101,101,110,71,117,105), {
-Name =string.char(69,109,112,121,114,101,97,110,68,114,97,103,111,110,76,111,97,100,101,114),
-ResetOnSpawn = false,
-ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-}, _0xA20A)
-local _0x8A72 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.fromOffset(340, 0),
-AutomaticSize = Enum.AutomaticSize.Y,
-Position = UDim2.new(0.5, -170, 0.5, -150),
-BackgroundColor3 = _0xF719.bg,
-BorderSizePixel = 0,
-Active = true,
-ClipsDescendants = true,
-}, _0x38D3)
-_0x34AC(_0x8A72, 14)
-_0x4C8B(_0x8A72, _0xF719.border, 1.5)
-_0x6442(string.char(85,73,76,105,115,116,76,97,121,111,117,116), {
-SortOrder = Enum.SortOrder.LayoutOrder,
-}, _0x8A72)
-local _0xAB60 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = _0xF719.title,
-BorderSizePixel = 0,
-LayoutOrder = 1,
-}, _0x8A72)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 6),
-Size = UDim2.new(1, -70, 0, 20),
-Text =string.char(69,77,80,89,82,69,65,78,32,68,82,65,71,79,78),
-Font = Enum.Font.GothamBold,
-TextSize = 16,
-TextColor3 = _0xF719.text,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-BackgroundTransparency = 1,
-Position = UDim2.fromOffset(16, 25),
-Size = UDim2.new(1, -70, 0, 14),
-Text =string.char(76,105,99,101,110,115,101,32,118,101,114,105,102,105,99,97,116,105,111,110),
-Font = Enum.Font.Gotham,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0xAB60)
-local _0x5773 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.fromOffset(26, 26),
-Position = UDim2.new(1, -36, 0, 10),
-BackgroundColor3 = _0xF719.red,
-AutoButtonColor = false,
-BorderSizePixel = 0,
-Text =string.char(88),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 13,
-}, _0xAB60)
-_0x34AC(_0x5773, 7)
-local _0x3CD7 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 2),
-BackgroundColor3 = Color3.new(1, 1, 1),
-BorderSizePixel = 0,
-LayoutOrder = 2,
-}, _0x8A72)
-do
-local _0xE8C6 = Instance.new(string.char(85,73,71,114,97,100,105,101,110,116))
-_0xE8C6.Color = ColorSequence.new(_0xF719.accent, _0xF719.accent2)
-_0xE8C6.Parent = _0x3CD7
-end
-local _0x67A2 = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 0),
-AutomaticSize = Enum.AutomaticSize.Y,
-BackgroundTransparency = 1,
-LayoutOrder = 3,
-}, _0x8A72)
-_0x6442(string.char(85,73,80,97,100,100,105,110,103), {
-PaddingTop = UDim.new(0, 16),
-PaddingBottom = UDim.new(0, 16),
-PaddingLeft = UDim.new(0, 16),
-PaddingRight = UDim.new(0, 16),
-}, _0x67A2)
-_0x6442(string.char(85,73,76,105,115,116,76,97,121,111,117,116), {
-Padding = UDim.new(0, 10),
-SortOrder = Enum.SortOrder.LayoutOrder,
-}, _0x67A2)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 20),
-BackgroundTransparency = 1,
-Text =string.char(69,110,116,101,114,32,121,111,117,114,32,107,101,121),
-Font = Enum.Font.GothamBold,
-TextSize = 15,
-TextColor3 = _0xF719.text,
-TextXAlignment = Enum.TextXAlignment.Left,
-LayoutOrder = 1,
-}, _0x67A2)
-_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 32),
-BackgroundTransparency = 1,
-Text =string.char(69,97,99,104,32,107,101,121,32,119,111,114,107,115,32,111,110,32,111,110,101,32,100,101,118,105,99,101,32,111,110,108,121,46,32,84,104,101,32,102,105,114,115,116,32,100,101,118,105,99,101,32,116,104,97,116,32,117,115,101,115,32,97,32,107,101,121,32,105,115,32,108,111,99,107,101,100,32,116,111,32,105,116,46),
-Font = Enum.Font.Gotham,
-TextSize = 11,
-TextColor3 = _0xF719.muted,
-TextWrapped = true,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextYAlignment = Enum.TextYAlignment.Top,
-LayoutOrder = 2,
-}, _0x67A2)
-local _0x17CB = _0x6442(string.char(70,114,97,109,101), {
-Size = UDim2.new(1, 0, 0, 42),
-BackgroundColor3 = _0xF719.panel,
-BorderSizePixel = 0,
-LayoutOrder = 3,
-}, _0x67A2)
-_0x34AC(_0x17CB, 9)
-local _0x516C = _0x4C8B(_0x17CB, _0xF719.border, 1)
-local _0xD49A = _0x6442(string.char(84,101,120,116,66,111,120), {
-Size = UDim2.new(1, -24, 1, 0),
-Position = UDim2.fromOffset(12, 0),
-BackgroundTransparency = 1,
-Text ="",
-PlaceholderText =string.char(88,88,88,88,45,88,88,88,88,45,88,88,88,88,45,88,88,88,88),
-PlaceholderColor3 = _0xF719.muted,
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamMedium,
-TextSize = 14,
-ClearTextOnFocus = false,
-TextXAlignment = Enum.TextXAlignment.Left,
-}, _0x17CB)
-_0xD49A.Focused:Connect(function()
-_0x443A(_0x516C, 0.15, { Color = _0xF719.accent })
-end)
-_0xD49A.FocusLost:Connect(function()
-_0x443A(_0x516C, 0.15, { Color = _0xF719.border })
-end)
-local _0x6992 = _0x6442(string.char(84,101,120,116,66,117,116,116,111,110), {
-Size = UDim2.new(1, 0, 0, 44),
-BackgroundColor3 = _0xF719.accent,
-AutoButtonColor = false,
-BorderSizePixel = 0,
-Text =string.char(65,67,84,73,86,65,84,69),
-TextColor3 = _0xF719.text,
-Font = Enum.Font.GothamBold,
-TextSize = 14,
-LayoutOrder = 4,
-}, _0x67A2)
-_0x34AC(_0x6992, 9)
-_0x6992.MouseEnter:Connect(function()
-_0x443A(_0x6992, 0.12, { BackgroundColor3 = _0xF719.accent:Lerp(Color3.new(1, 1, 1), 0.12) })
-end)
-_0x6992.MouseLeave:Connect(function()
-_0x443A(_0x6992, 0.12, { BackgroundColor3 = _0xF719.accent })
-end)
-local _0x1DA4 = _0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 16),
-BackgroundTransparency = 1,
-Text ="",
-Font = Enum.Font.GothamMedium,
-TextSize = 12,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-TextTruncate = Enum.TextTruncate.AtEnd,
-LayoutOrder = 5,
-}, _0x67A2)
-local _0xFD0B = _0xD2CF and (string.sub(_0xD2CF, 1, 8) ..string.char(46,46,46)) orstring.char(117,110,97,118,97,105,108,97,98,108,101)_0x6442(string.char(84,101,120,116,76,97,98,101,108), {
-Size = UDim2.new(1, 0, 0, 14),
-BackgroundTransparency = 1,
-Text =string.char(68,101,118,105,99,101,32,73,68,58,32).. _0xFD0B ..string.char(32,32,40,117,115,101,100,32,116,111,32,108,111,99,107,32,121,111,117,114,32,107,101,121,41),
-Font = Enum.Font.Gotham,
-TextSize = 10,
-TextColor3 = _0xF719.muted,
-TextXAlignment = Enum.TextXAlignment.Left,
-LayoutOrder = 6,
-}, _0x67A2)
-local function _0x0AF0(text, _0x832E)
-_0x1DA4.Text = text
-_0x1DA4.TextColor3 = _0x832E or _0xF719.muted
-end
-local function _0xDAB4(_0x8C8D)
-local _0xA724 = _0x8C8D.Position
-for _, dx in ipairs({ -6, 6, -4, 4, 0 }) do
-_0x443A(_0x8C8D, 0.04, { Position = _0xA724 + UDim2.fromOffset(dx, 0) })
-task.wait(0.045)
-end
-endlocal _0xB4BD = false
-local _0xB773
-local _0xEB13
-local function _0x9221(input)
-return input.UserInputType == Enum.UserInputType.MouseButton1
-or input.UserInputType == Enum.UserInputType.Touch
-end
-_0xAB60.InputBegan:Connect(function(input)
-if _0x9221(input) then
-_0xB4BD = true
-_0xB773 = input.Position
-_0xEB13 = _0x8A72.Position
-end
-end)
-_0x2699.InputChanged:Connect(function(input)
-if _0xB4BD
-and (input.UserInputType == Enum.UserInputType.MouseMovement
-or input.UserInputType == Enum.UserInputType.Touch) then
-local _0xB441 = input.Position - _0xB773
-_0x8A72.Position = UDim2.new(
-_0xEB13.X.Scale,
-_0xEB13.X.Offset + _0xB441.X,
-_0xEB13.Y.Scale,
-_0xEB13.Y.Offset + _0xB441.Y
-)
-end
-end)
-_0x2699.InputEnded:Connect(function(input)
-if _0x9221(input) then
-_0xB4BD = false
-end
-end)local function _0x58CF()
-local _0x9948 = {}
-pcall(function()
-if isfile and readfile and isfile(_0x3DAD) then
-local _0x8059 = _0x6CAE:JSONDecode(readfile(_0x3DAD))
-if type(_0x8059) ==string.char(116,97,98,108,101)then
-_0x9948 = _0x8059
-end
-end
-end)
-return _0x9948
-end
-local function _0xD9F7(_0x9948)
-pcall(function()
-if writefile then
-writefile(_0x3DAD, _0x6CAE:JSONEncode(_0x9948))
-end
-end)
-end
-local function _0xDA7F(_0x7081)
-if not _0x80EE[_0x7081] then
-return false,string.char(73,110,118,97,108,105,100,32,107,101,121)end
-if not _0xD2CF then
-return false,string.char(67,111,117,108,100,32,110,111,116,32,114,101,97,100,32,121,111,117,114,32,100,101,118,105,99,101,32,73,68)end
-local _0xE10F = _0x58CF()
-local _0xB57F = _0xE10F[_0x7081]
-if _0xB57F and _0xB57F ~= _0xD2CF then
-return false,string.char(84,104,105,115,32,107,101,121,32,105,115,32,108,111,99,107,101,100,32,116,111,32,97,110,111,116,104,101,114,32,100,101,118,105,99,101)end
-if not _0xB57F then
-_0xE10F[_0x7081] = _0xD2CF
-_0xD9F7(_0xE10F)
-end
-return true
-end
-local _0x54A3 = false
-local function _0x81BF()
-if _0x54A3 then return endlocal _0xDBCD = (_0xD49A.Text or""):gsub(string.char(37,115,43),"")
-local _0x7081 = string.lower(_0xDBCD)
-if #_0x7081 < 8 then
-_0x0AF0(string.char(69,110,116,101,114,32,97,32,118,97,108,105,100,32,107,101,121), _0xF719.red)
-_0xDAB4(_0x17CB)
-return
-end
-_0x54A3 = true
-_0x6992.Text =string.char(67,72,69,67,75,73,78,71,46,46,46)_0x0AF0(string.char(67,104,101,99,107,105,110,103,32,107,101,121,46,46,46), _0xF719.muted)
-local _0x57FC, _0x83A2 = _0xDA7F(_0x7081)
-if not _0x57FC then
-_0x54A3 = false
-_0x6992.Text =string.char(65,67,84,73,86,65,84,69)_0x0AF0(_0x83A2, _0xF719.red)
-_0xDAB4(_0x17CB)
-return
-end
-pcall(function()
-if writefile then
-writefile(_0xD619, _0x7081)
-end
-end)
-_0x6992.Text =string.char(85,78,76,79,67,75,69,68)_0x443A(_0x6992, 0.2, { BackgroundColor3 = _0xF719.green })
-_0x0AF0(string.char(75,101,121,32,97,99,99,101,112,116,101,100,32,45,32,108,111,97,100,105,110,103,32,109,101,110,117,46,46,46), _0xF719.green)
-task.wait(0.7)
-_0x38D3:Destroy()
-task.spawn(function()
-local _0xDEF9, _0x615F = pcall(_0x6AE2)
-if not _0xDEF9 then
-warn(string.char(91,76,79,65,68,69,82,93,32,115,99,114,105,112,116,32,101,114,114,111,114,58), _0x615F)
-end
-end)
-end
-_0x6992.MouseButton1Click:Connect(_0x81BF)
-_0xD49A.FocusLost:Connect(function(enterPressed)
-if enterPressed then
-_0x81BF()
-end
-end)
-_0x5773.MouseButton1Click:Connect(function()
-_0x38D3:Destroy()
-end)pcall(function()
-if isfile and readfile and isfile(_0xD619) then
-_0xD49A.Text = readfile(_0xD619)
-end
+    if isfile and readfile and isfile(KEY_FILE) then
+        keyBox.Text = readfile(KEY_FILE)
+    end
 end)
